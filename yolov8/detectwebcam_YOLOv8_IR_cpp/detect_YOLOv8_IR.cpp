@@ -21,7 +21,7 @@ int main()
 {
     // auto xml = "/home/ss21mipt/Documents/starkit/DIPLOMA/YOEO/config/IR&onnx_for_416_Petr_1/yoeo.xml";
     // auto xml = "/home/ss21mipt/Documents/starkit/DIPLOMA/to_rhoban/weights/Feds_yolov8_2_openvino/best.xml";
-    auto xml = "/home/ss21mipt/Documents/starkit/DIPLOMA/to_rhoban/weights/opset_14/Feds_yolov8_2_openvino_model/Feds_yolov8_2.xml";
+    auto xml = "/home/ss21mipt/DIPLOMA/weights/best_openvino_model/best.xml";
     ov::Core core;
 
     std::shared_ptr<ov::Model> net = core.read_model(xml);    // net = ie.ReadNetwork(model_path);
