@@ -17,6 +17,15 @@ struct Detection
     cv::Rect box{};
 };
 
+struct det_mask
+{
+    int class_id{0};
+    std::string className{};
+    float confidence{0.0};
+    cv::Scalar color{};
+    cv::Rect box{};
+    float * mask;
+};
 
 
 std::vector<Detection> parsing_boxes(cv::Mat image, auto out_data1, auto box_shape1, auto box_type, float modelScoreThreshold, float modelNMSThreshold, int number_classes, std::string &name_classes) {
@@ -67,7 +76,8 @@ std::vector<Detection> parsing_boxes(cv::Mat image, auto out_data1, auto box_sha
     std::vector<int> class_ids;
     std::vector<float> confidences;
     std::vector<cv::Rect> boxes;
-
+    std::vector<float *> detection_masks;
+    
     for (int i = 0; i < rows; ++i)
     {
         if (yolov8)
@@ -89,6 +99,7 @@ std::vector<Detection> parsing_boxes(cv::Mat image, auto out_data1, auto box_sha
                 float y = data[1];
                 float w = data[2];
                 float h = data[3];
+                
                 std::cout << "[x,y,w,h]: [" << x << ", " << y << ", " << w << ", " << h << "] confidences: " << *confidences.rbegin() << "others are :" << dimensions <<std::endl;
 
                 int left = int((x - 0.5 * w) * x_factor);
@@ -98,6 +109,7 @@ std::vector<Detection> parsing_boxes(cv::Mat image, auto out_data1, auto box_sha
                 int height = int(h * y_factor);
 
                 boxes.push_back(cv::Rect(left, top, width, height));
+                detection_masks.push_back(data + 5 + number_classes);
             }
         }
 
