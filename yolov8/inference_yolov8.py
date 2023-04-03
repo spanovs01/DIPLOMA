@@ -93,6 +93,7 @@ def postprocess(
     nms_kwargs = {"agnostic": agnosting_nms, "max_det":max_detections}
     # if pred_masks is not None:
     #     nms_kwargs["nm"] = 32
+    # print(f"BEFORE NMS preds are here: {pred_boxes.shape}")
     preds = ops.non_max_suppression(
         torch.from_numpy(pred_boxes),
         min_conf_threshold,
@@ -100,10 +101,12 @@ def postprocess(
         nc=1,
         **nms_kwargs
     )
+    # print(f"AFTER NMS preds are here: {len(preds)}, {preds[0]}, {len(preds[0][0])}")
     results = []
     proto = torch.from_numpy(pred_masks) if pred_masks is not None else None
 
     for i, pred in enumerate(preds):
+        print(f"PRED = {pred}")
         shape = orig_img[i].shape if isinstance(orig_img, list) else orig_img.shape
         if not len(pred):
             results.append({"det": [], "segment": []})
@@ -169,8 +172,8 @@ def inference(model_xml_path, im_path):
             break
 if __name__ == '__main__':
     # xml = "/home/ss21mipt/Documents/starkit/DIPLOMA/to_rhoban/weights/Feds_yolov8_2_openvino/best.xml"
-    xml = "/home/ss21mipt/Documents/starkit/DIPLOMA/to_rhoban/weights/opset_14/Feds_yolov8_2_openvino_model/Feds_yolov8_2.xml"
-    png = "/home/ss21mipt/Documents/starkit/field.jpg"
+    xml = "/home/ss21mipt/DIPLOMA/weights/best_openvino_model/best.xml"
+    png = "/home/ss21mipt/Pictures/photo_2023-03-28_12-46-25.jpg"
     inference(xml, png)
 # print()
 # input_image = transforms.Compose([
