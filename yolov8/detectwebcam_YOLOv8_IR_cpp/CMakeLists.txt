@@ -4,6 +4,9 @@ project(detect_YOLOv8_IR VERSION 0.1)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+# eigen
+find_package(Eigen3 REQUIRED PATHS /home/ss21mipt/eigen-3.4.0/)
+
 # OpenCV
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
@@ -15,4 +18,4 @@ set(PROJECT_SOURCES
 )
 
 add_executable(detect_YOLOv8_IR ${PROJECT_SOURCES})
-target_link_libraries(detect_YOLOv8_IR PRIVATE openvino::runtime ${OpenCV_LIBS})
+target_link_libraries(detect_YOLOv8_IR PRIVATE openvino::runtime Eigen3::Eigen ${OpenCV_LIBS})

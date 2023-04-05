@@ -1,3 +1,4 @@
+#include <Eigen/Core>
 #include "openvino/openvino.hpp"
 #include <opencv2/opencv.hpp>
 #include <ngraph/type/element_type.hpp>
@@ -17,7 +18,7 @@ struct Detection
     cv::Rect box{};
 };
 
-struct det_mask
+struct Detection_mask
 {
     int class_id{0};
     std::string className{};
@@ -27,8 +28,7 @@ struct det_mask
     float * mask;
 };
 
-
-std::vector<Detection> parsing_boxes(cv::Mat image, auto out_data1, auto box_shape1, auto box_type, float modelScoreThreshold, float modelNMSThreshold, int number_classes, std::string &name_classes) {
+std::vector<Detection_mask> parsing_boxes(cv::Mat image, auto out_data1, auto box_shape1, auto box_type, float modelScoreThreshold, float modelNMSThreshold, int number_classes, std::string &name_classes) {
 
     cv::Size modelShape(640,640);
     bool yolov8;
@@ -109,7 +109,7 @@ std::vector<Detection> parsing_boxes(cv::Mat image, auto out_data1, auto box_sha
                 int height = int(h * y_factor);
 
                 boxes.push_back(cv::Rect(left, top, width, height));
-                detection_masks.push_back(data + 5 + number_classes);
+                detection_masks.push_back(data + 4 + number_classes);
             }
         }
 
@@ -117,25 +117,40 @@ std::vector<Detection> parsing_boxes(cv::Mat image, auto out_data1, auto box_sha
     }
 
     std::vector<int> nms_result;
+    // NMSBoxes(boxes, confidences, modelScoreThreshold, modelNMSThreshold, nms_result);
     cv::dnn::NMSBoxes(boxes, confidences, modelScoreThreshold, modelNMSThreshold, nms_result);
-
+    
     std::vector<Detection> detections{};
+    std::vector<Detection_mask> detections_mask{};
+
     for (unsigned long i = 0; i < nms_result.size(); ++i)
     {
         int idx = nms_result[i];
 
         Detection result;
+        Detection_mask result_mask;
+
         result.class_id = class_ids[idx];
         result.confidence = confidences[idx];
 
+        result_mask.class_id = class_ids[idx];
+        result_mask.confidence = confidences[idx];
+
         result.color = cv::Scalar(255, 0, 0);
+        result_mask.color = cv::Scalar(255, 0, 0);
 
         result.className = name_classes;
         result.box = boxes[idx];
 
+        result_mask.className = name_classes;
+        result_mask.box = boxes[idx];
+
+        result_mask.mask = detection_masks[idx];
+
         detections.push_back(result);
+        detections_mask.push_back(result_mask);
     }
-    return detections;
+    return detections_mask;
 }
 
 int main()
@@ -143,6 +158,7 @@ int main()
     // auto xml = "/home/ss21mipt/Documents/starkit/DIPLOMA/YOEO/config/IR&onnx_for_416_Petr_1/yoeo.xml";
     // auto xml = "/home/ss21mipt/Documents/starkit/DIPLOMA/to_rhoban/weights/Feds_yolov8_2_openvino/best.xml";
     auto xml = "/home/ss21mipt/DIPLOMA/weights/best_openvino_model/best.xml";
+    auto png = "/home/ss21mipt/Pictures/photo_2023-03-28_12-46-25.jpg";
     ov::Core core;
 
     std::shared_ptr<ov::Model> net = core.read_model(xml);    // net = ie.ReadNetwork(model_path);
@@ -185,7 +201,8 @@ int main()
     std::string name_classes = "g";
 
     while (cap.isOpened()){
-        cap >> image;
+        // cap >> image;
+        image = cv::imread(png);
         std::cout << "doshlo" << std::endl;
         if (image.empty() || !image.data) {
             return false;
@@ -222,9 +239,11 @@ int main()
 
         std::cout << "SEGMENTATION MASK" << mask_shape2 << std::endl;
 
+        
+
         // PARSING BOXES
 
-        std::vector<Detection> detections = parsing_boxes(image, out_data1, box_shape1, box_type, modelScoreThreshold, modelNMSThreshold, number_classes, name_classes);
+        std::vector<Detection_mask> detections = parsing_boxes(image, out_data1, box_shape1, box_type, modelScoreThreshold, modelNMSThreshold, number_classes, name_classes);
 
         // PARSING SEGMENTATION
 
@@ -235,11 +254,15 @@ int main()
 
         for (int i = 0; i < detections_num; ++i)
         {
-            Detection detection = detections[i];
+            Detection_mask detection = detections[i];
 
             cv::Rect box = detection.box;
             cv::Scalar color = detection.color;
-
+            std::cout << "MASKS" << std::endl;  
+            for (int mix = 0; mix < 32; mix++) {
+                std::cout << "MASK[" << mix << "] = " << *(detection.mask + mix) << std::endl;  
+                
+            }  
             // Detection box
             cv::rectangle(image, box, color, 2);
 
