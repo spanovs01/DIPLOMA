@@ -266,6 +266,9 @@ detect_YOLOv8_IR_SOURCE_DIR:STATIC=/home/ss21mipt/DIPLOMA/yolov8/detectwebcam_YO
 //Path to a library.
 kineto_LIBRARY:FILEPATH=/home/ss21mipt/libtorch/lib/libkineto.a
 
+//The directory containing a CMake configuration file for lidTorch.
+lidTorch_DIR:PATH=lidTorch_DIR-NOTFOUND
+
 
 ########################
 # INTERNAL cache entries

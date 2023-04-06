@@ -1,4 +1,5 @@
-#include <Eigen/Core>
+// #include <Eigen/Core>
+#include <torch/script.h>
 #include "openvino/openvino.hpp"
 #include <opencv2/opencv.hpp>
 #include <ngraph/type/element_type.hpp>
@@ -201,8 +202,8 @@ int main()
     std::string name_classes = "g";
 
     while (cap.isOpened()){
-        // cap >> image;
-        image = cv::imread(png);
+        cap >> image;
+        // image = cv::imread(png);
         std::cout << "doshlo" << std::endl;
         if (image.empty() || !image.data) {
             return false;
@@ -245,12 +246,42 @@ int main()
 
         std::vector<Detection_mask> detections = parsing_boxes(image, out_data1, box_shape1, box_type, modelScoreThreshold, modelNMSThreshold, number_classes, name_classes);
 
+
         // PARSING SEGMENTATION
 
 
+        
+        // out_data2
+
+        torch::Tensor proto;
+        torch::Tensor mask_in;
+        torch::Tensor mask_in_m;
+        torch::Tensor matrix_multi;
 
         int detections_num = detections.size();
         std::cout << "Number of detections:" << detections_num << std::endl;
+        if (detections_num) {
+            auto options = torch::TensorOptions().dtype(torch::kFloat32);
+            // torch::Tensor proto = torch::zeros({32,160,160});
+            proto = torch::from_blob(out_data2, {32,160,160}, options);
+            std::cout << "PROTO FILLED" << std::endl;
+            mask_in = torch::zeros({detections_num, 32});
+
+            for(int num = 0; num < detections_num; num++) {
+                for(int mask_elem = 0; mask_elem < 32; mask_elem++) {
+                    mask_in[num][mask_elem] = *(detections[num].mask + mask_elem);
+                }
+            }
+            std::cout << "MASK_IN FILLED" << std::endl;
+            
+            mask_in_m = proto.view({32, 25600});
+        
+            matrix_multi = torch::mm(mask_in, mask_in_m);
+            for(int p=0; p<25600; p++) {
+                std::cout << matrix_multi[0][p] << std::endl;
+            }
+        }
+        std::cout << "NY CHECK" << matrix_multi.sizes() << std::endl;
 
         for (int i = 0; i < detections_num; ++i)
         {
@@ -258,9 +289,9 @@ int main()
 
             cv::Rect box = detection.box;
             cv::Scalar color = detection.color;
-            std::cout << "MASKS" << std::endl;  
+            // std::cout << "MASKS" << std::endl;  
             for (int mix = 0; mix < 32; mix++) {
-                std::cout << "MASK[" << mix << "] = " << *(detection.mask + mix) << std::endl;  
+                // std::cout << "MASK[" << mix << "] = " << *(detection.mask + mix) << std::endl;  
                 
             }  
             // Detection box

@@ -120,6 +120,8 @@ def postprocess(
             masks = ops.process_mask_native(proto[i], pred[:, 6:], pred[:, :4], shape[:2])  # HWC
             segments = [ops.scale_segments(input_hw, x, shape, normalize=False) for x in ops.masks2segments(masks)]
         else:
+            print(f"PROTOS[i] == {proto[i].shape}")#, {proto[i]}")
+            print(f"PRED[:, 6:] == {pred[:, 6:].shape}")#, {pred[:, 6:]}")
             masks = ops.process_mask(proto[i], pred[:, 6:], pred[:, :4], input_hw, upsample=True)
             pred[:, :4] = ops.scale_boxes(input_hw, pred[:, :4], shape).round()
             segments = [ops.scale_segments(input_hw, x, shape, normalize=False) for x in ops.masks2segments(masks)]
@@ -136,14 +138,14 @@ def inference(model_xml_path, im_path):
     model = ie.read_model(model_xml_path)
     device = "CPU"
     compiled_model = ie.compile_model(model=model, device_name=device)
-    print("INPUT TENSOR ", compiled_model.input().shape, compiled_model.output(0).shape, compiled_model.output(1).shape, type(compiled_model))
+    print("INPUT TENSOR ", compiled_model.input().shape, compiled_model.output(0).shape)#, compiled_model.output(1).shape, type(compiled_model))
     cam = cv2.VideoCapture(0)
     key = cv2.waitKey(1)
 
     while key != 27:
-        _, image = cam.read()
-        cv2.imshow("source", image)
-        # image = cv2.imread(im_path)
+        # _, image = cam.read()
+        # cv2.imshow("source", image)
+        image = cv2.imread(im_path)
         image = cv2.resize(image, (640,640), interpolation=cv2.INTER_LINEAR)
         im = np.expand_dims(image, axis=0)
         im_for_draw = image
@@ -160,8 +162,8 @@ def inference(model_xml_path, im_path):
         output_seg = compiled_model.output(1)
         boxes = compiled_model([input_tensor])[output_det]
         masks = compiled_model([input_tensor])[output_seg]  
-        # results = postprocess(boxes, (640,640), image, pred_masks=masks)
-        # proto = torch.from_numpy(masks) if masks is not None else None
+        results = postprocess(boxes, (640,640), image, pred_masks=masks)
+        proto = torch.from_numpy(masks) if masks is not None else None
         detections = postprocess(pred_boxes=boxes, input_hw=(640,640), orig_img=image, pred_masks=masks)
         res_img = draw_results(detections, im_for_draw, label_map)
         # cv2.imshow("source" ,image)
@@ -172,6 +174,7 @@ def inference(model_xml_path, im_path):
             break
 if __name__ == '__main__':
     # xml = "/home/ss21mipt/Documents/starkit/DIPLOMA/to_rhoban/weights/Feds_yolov8_2_openvino/best.xml"
+    # xml = "/home/ss21mipt/Downloads/best.xml"
     xml = "/home/ss21mipt/DIPLOMA/weights/best_openvino_model/best.xml"
     png = "/home/ss21mipt/Pictures/photo_2023-03-28_12-46-25.jpg"
     inference(xml, png)

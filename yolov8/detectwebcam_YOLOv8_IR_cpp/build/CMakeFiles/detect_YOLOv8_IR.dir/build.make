@@ -93,6 +93,9 @@ detect_YOLOv8_IR_EXTERNAL_OBJECTS =
 detect_YOLOv8_IR: CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o
 detect_YOLOv8_IR: CMakeFiles/detect_YOLOv8_IR.dir/build.make
 detect_YOLOv8_IR: /opt/intel/openvino_2022.3.0/runtime/lib/intel64/libopenvino.so.2022.3.0
+detect_YOLOv8_IR: /home/ss21mipt/libtorch/lib/libtorch.so
+detect_YOLOv8_IR: /home/ss21mipt/libtorch/lib/libc10.so
+detect_YOLOv8_IR: /home/ss21mipt/libtorch/lib/libkineto.a
 detect_YOLOv8_IR: /usr/local/lib/libopencv_gapi.so.4.7.0
 detect_YOLOv8_IR: /usr/local/lib/libopencv_highgui.so.4.7.0
 detect_YOLOv8_IR: /usr/local/lib/libopencv_ml.so.4.7.0
@@ -101,6 +104,7 @@ detect_YOLOv8_IR: /usr/local/lib/libopencv_photo.so.4.7.0
 detect_YOLOv8_IR: /usr/local/lib/libopencv_stitching.so.4.7.0
 detect_YOLOv8_IR: /usr/local/lib/libopencv_video.so.4.7.0
 detect_YOLOv8_IR: /usr/local/lib/libopencv_videoio.so.4.7.0
+detect_YOLOv8_IR: /home/ss21mipt/libtorch/lib/libc10.so
 detect_YOLOv8_IR: /usr/local/lib/libopencv_imgcodecs.so.4.7.0
 detect_YOLOv8_IR: /usr/local/lib/libopencv_dnn.so.4.7.0
 detect_YOLOv8_IR: /usr/local/lib/libopencv_calib3d.so.4.7.0
