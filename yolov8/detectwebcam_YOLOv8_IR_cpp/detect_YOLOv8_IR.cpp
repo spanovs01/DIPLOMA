@@ -29,6 +29,8 @@ struct Detection_mask
     float * mask;
 };
 
+
+
 std::vector<Detection_mask> parsing_boxes(cv::Mat image, auto out_data1, auto box_shape1, auto box_type, float modelScoreThreshold, float modelNMSThreshold, int number_classes, std::string &name_classes) {
 
     cv::Size modelShape(640,640);
@@ -73,7 +75,7 @@ std::vector<Detection_mask> parsing_boxes(cv::Mat image, auto out_data1, auto bo
 
     float x_factor = image.cols / modelShape.width;
     float y_factor = image.rows / modelShape.height;
-
+    std::cout << "X AND Y FACTORS" << x_factor<< " " << y_factor << std::endl;
     std::vector<int> class_ids;
     std::vector<float> confidences;
     std::vector<cv::Rect> boxes;
@@ -101,13 +103,14 @@ std::vector<Detection_mask> parsing_boxes(cv::Mat image, auto out_data1, auto bo
                 float w = data[2];
                 float h = data[3];
                 
-                std::cout << "[x,y,w,h]: [" << x << ", " << y << ", " << w << ", " << h << "] confidences: " << *confidences.rbegin() << "others are :" << dimensions <<std::endl;
+                // std::cout << "[x,y,w,h]: [" << x << ", " << y << ", " << w << ", " << h << "] confidences: " << *confidences.rbegin() << "others are :" << dimensions <<std::endl;
 
                 int left = int((x - 0.5 * w) * x_factor);
                 int top = int((y - 0.5 * h) * y_factor);
 
                 int width = int(w * x_factor);
                 int height = int(h * y_factor);
+                std::cout << "[left,top,wisth,height]: [" << left << ", " << top << ", " << width << ", " << height << "] confidences: " << *confidences.rbegin() << "others are :" << dimensions <<std::endl;
 
                 boxes.push_back(cv::Rect(left, top, width, height));
                 detection_masks.push_back(data + 4 + number_classes);
@@ -255,9 +258,14 @@ int main()
 
         torch::Tensor proto;
         torch::Tensor mask_in;
+        torch::Tensor rect;
         torch::Tensor mask_in_m;
         torch::Tensor matrix_multi;
-
+        torch::Tensor matrix_multi_3d;
+        torch::Tensor r;
+        torch::Tensor c;
+        // auto segment_shape;
+        auto image_shape = {640,640};
         int detections_num = detections.size();
         std::cout << "Number of detections:" << detections_num << std::endl;
         if (detections_num) {
@@ -265,23 +273,73 @@ int main()
             // torch::Tensor proto = torch::zeros({32,160,160});
             proto = torch::from_blob(out_data2, {32,160,160}, options);
             std::cout << "PROTO FILLED" << std::endl;
-            mask_in = torch::zeros({detections_num, 32});
-
+            mask_in = torch::zeros({detections_num, 32}, {torch::kFloat32});
+            rect = torch::zeros({detections_num, 4}, {torch::kFloat32});
             for(int num = 0; num < detections_num; num++) {
                 for(int mask_elem = 0; mask_elem < 32; mask_elem++) {
                     mask_in[num][mask_elem] = *(detections[num].mask + mask_elem);
+                    
                 }
+                rect[num][0] = detections[num].box.x * 0.25;
+                rect[num][1] = detections[num].box.y * 0.25;
+                rect[num][2] = (detections[num].box.x + detections[num].box.width) * 0.25;
+                rect[num][3] = (detections[num].box.y + detections[num].box.height) * 0.25;
+                std::cout << "Rect elements!!! = " << rect[num][0] << " " << rect[num][1] << " " << rect[num][2] << " " << rect[num][3] << " " <<std::endl;
+                
             }
-            std::cout << "MASK_IN FILLED" << std::endl;
+            std::cout << "MASK_IN AND RECT FILLED" << std::endl;
             
             mask_in_m = proto.view({32, 25600});
-        
+
             matrix_multi = torch::mm(mask_in, mask_in_m);
-            for(int p=0; p<25600; p++) {
-                std::cout << matrix_multi[0][p] << std::endl;
+            matrix_multi_3d = torch::sigmoid(matrix_multi).view({detections_num, 160, 160});
+            rect = rect.unsqueeze(2);
+            auto bbs = torch::chunk(rect, 4, 1);
+            r = torch::arange(160).unsqueeze(0).unsqueeze(0);
+            c = torch::arange(160).unsqueeze(0).unsqueeze(2);
+            std::cout << "R and C shapes: " << r.sizes() << " " << c.sizes() << std::endl;
+            auto maxim = 0;
+            auto minim = 250;
+            for(int num = 0; num < detections_num; num++) {
+                for (int h = 0; h < 160; h++) {
+                    for (int w = 0; w < 160; w++) {
+                        if (bbs[0][num][0].item<float>() > maxim) {
+                            maxim = bbs[0][num][0].item<float>();
+                        }
+                        if (bbs[0][num][0].item<float>() < minim) {
+                            minim = bbs[0][num][0].item<float>();
+                        }
+                        // std::cout << r[0][0][w].item<float>();
+                        if ((r[0][0][w].item<float>() >= bbs[0][num][0].item<float>()) && (r[0][0][w].item<float>() < bbs[2][num][0].item<float>()) && (c[0][h][0].item<float>() >= bbs[1][num][0].item<float>()) && (c[0][h][0].item<float>() < bbs[3][num][0].item<float>())) {
+                            matrix_multi_3d[num][h][w] *= 255; 
+                            // std::cout << "HELLO" << std::endl;
+                        }
+                        else {
+                            matrix_multi_3d[num][h][w] = 0;
+                        }
+                    }
+                }
             }
+            // for(int p=0; p<160; p++) {
+            std::cout << maxim << "                    "  << minim << std::endl;
+            // }
+
+            auto segment_shape = matrix_multi_3d.sizes();
+
         }
-        std::cout << "NY CHECK" << matrix_multi.sizes() << std::endl;
+        std::cout << "matrix_multi_3d " << matrix_multi_3d.sizes() << " Rect " << rect.sizes() << std::endl;
+        cv::Mat test_mask = cv::Mat::ones(160, 160, CV_32FC1);
+        for(int num = 0; num < detections_num; num++) {
+            for(size_t i=0; i<160; i++){
+                for(size_t j=0; j<160; j++){
+                    test_mask.at<float>(j,i) = (float)(matrix_multi_3d[num][i][j].item<float>());
+                    
+                    // std::cout << " ZDOROVA" << std::endl;
+                } 
+            }
+            // cv::imshow("test_mask", test_mask);
+            // cv::waitKey(1);
+        }
 
         for (int i = 0; i < detections_num; ++i)
         {
@@ -309,6 +367,7 @@ int main()
 
 
         cv::imshow("webcam", image);
+        cv::imshow("test_mask", test_mask);
         if(cv::waitKey(30)>=0)
             break;
     }
