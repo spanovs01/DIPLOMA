@@ -78,6 +78,7 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
   /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
   /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/c++/9/cstdint \
   /usr/include/c++/9/bits/allocator.h \
   /usr/include/x86_64-linux-gnu/c++/9/bits/c++allocator.h \
@@ -139,8 +140,11 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
   /usr/include/x86_64-linux-gnu/bits/select.h \
   /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/alloca.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
   /usr/include/c++/9/bits/std_abs.h \
   /usr/include/c++/9/cstdio \
   /usr/include/stdio.h \
@@ -150,6 +154,8 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
   /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
   /usr/include/x86_64-linux-gnu/bits/sys_errlist.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/c++/9/cerrno \
   /usr/include/errno.h \
   /usr/include/x86_64-linux-gnu/bits/errno.h \
@@ -238,6 +244,8 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
   /usr/include/c++/9/cstring \
   /usr/include/string.h \
   /usr/include/strings.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
   /usr/include/c++/9/experimental/string_view \
   /usr/include/c++/9/experimental/bits/lfts_config.h \
   /usr/include/c++/9/experimental/bits/string_view.tcc \
@@ -280,6 +288,7 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
   /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
   /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
   /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
+  /usr/include/x86_64-linux-gnu/bits/mathinline.h \
   /home/ss21mipt/libtorch/include/c10/core/GeneratorImpl.h \
   /home/ss21mipt/libtorch/include/c10/core/TensorImpl.h \
   /home/ss21mipt/libtorch/include/c10/core/Backend.h \
@@ -4909,8 +4918,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /opt/intel/openvino_2022.3.0/runtime/include/openvino/core/rt_info.hpp:
 
-/opt/intel/openvino_2022.3.0/runtime/include/openvino/pass/pass.hpp:
-
 /opt/intel/openvino_2022.3.0/runtime/include/ngraph/op/util/variable.hpp:
 
 /opt/intel/openvino_2022.3.0/runtime/include/ngraph/attribute_visitor.hpp:
@@ -5210,8 +5217,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/trapezoid_native.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/transpose_copy_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/transpose_native.h:
 
 /opt/intel/openvino_2022.3.0/runtime/include/openvino/core/except.hpp:
 
@@ -7907,19 +7912,23 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/nll_loss2d_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/_foreach_tan.h:
+/home/ss21mipt/libtorch/include/ATen/ops/index_select_native.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/log1p_native.h:
+/home/ss21mipt/libtorch/include/ATen/ops/nll_loss.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/elu_backward.h:
+/home/ss21mipt/libtorch/include/ATen/ops/tril_native.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/linalg_lu_factor_ex_ops.h:
+/home/ss21mipt/libtorch/include/ATen/ops/nextafter.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/_foreach_sub_ops.h:
+/home/ss21mipt/libtorch/include/ATen/ops/new_full.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/_cdist_backward_native.h:
+/home/ss21mipt/libtorch/include/ATen/ops/new_empty.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/_transformer_encoder_layer_fwd.h:
+/opt/intel/openvino_2022.3.0/runtime/include/openvino/core/preprocess/preprocess_steps.hpp:
+
+/home/ss21mipt/libtorch/include/ATen/ops/nested_to_padded_tensor_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/nested_to_padded_tensor.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_foreach_sqrt_ops.h:
 
@@ -8016,6 +8025,10 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/rrelu_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_foreach_clamp_max.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/transpose_native.h:
+
+/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_foreach_ceil.h:
 
@@ -8391,10 +8404,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/_foreach_round_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/_foreach_trunc_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/neg.h:
-
 /home/ss21mipt/libtorch/include/ATen/ops/special_spherical_bessel_j0_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_copy_from.h:
@@ -8498,12 +8507,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/neg_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/swapaxes_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_cast_Byte_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_foreach_tanh.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_native_decoder_only_multi_head_attention.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/flipud.h:
 
@@ -8627,10 +8630,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/_make_per_channel_quantized_tensor_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/q_scale_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/q_zero_point_ops.h:
-
 /home/ss21mipt/libtorch/include/ATen/ops/permute_copy.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/q_per_channel_zero_points_ops.h:
@@ -8668,12 +8667,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/unsafe_split_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/positive_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/rrelu_with_noise_backward_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/random_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/orgqr_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_efficient_attention_forward.h:
 
@@ -8721,10 +8714,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/new_full_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/chunk_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/index_copy_ops.h:
-
 /home/ss21mipt/libtorch/include/ATen/ops/relu_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/negative_ops.h:
@@ -8734,6 +8723,12 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/c10/core/ScalarTypeToTypeMeta.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/not_equal_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/not_equal_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/new_empty_strided.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/narrow_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/narrow_copy_ops.h:
 
@@ -8945,10 +8940,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/_sample_dirichlet_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/_foreach_zero.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/is_same_size_ops.h:
-
 /home/ss21mipt/libtorch/include/ATen/ops/special_shifted_chebyshev_polynomial_u_meta.h:
 
 /usr/include/c++/9/cwchar:
@@ -9091,6 +9082,10 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/index_ops.h:
 
+/home/ss21mipt/libtorch/include/ATen/ops/chunk_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/index_copy_ops.h:
+
 /home/ss21mipt/libtorch/include/ATen/ops/exp2_meta.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/miopen_convolution_add_relu.h:
@@ -9181,6 +9176,64 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/mean_ops.h:
 
+/usr/local/include/opencv4/opencv2/stitching/detail/motion_estimators.hpp:
+
+/home/ss21mipt/libtorch/include/ATen/ops/sub_meta.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/_test_optional_floatlist_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/diagonal_scatter_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/diff_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/linalg_lu_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/_foreach_mul_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/diag_ops.h:
+
+/usr/include/strings.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/special_xlog1py_ops.h:
+
+/usr/include/c++/9/bits/atomic_base.h:
+
+/usr/include/c++/9/vector:
+
+/home/ss21mipt/libtorch/include/ATen/ops/rshift_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/miopen_convolution_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/_convolution_mode.h:
+
+/usr/include/c++/9/experimental/bits/lfts_config.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/reflection_pad3d.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/randn_like_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/core/Dict.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/q_scale_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/q_zero_point_ops.h:
+
+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/randint_like_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/_assert_async.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/rsqrt_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/to_sparse_csr_ops.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/9/include/syslimits.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/nansum_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/binary_cross_entropy_with_logits.h:
+
 /opt/intel/openvino_2022.3.0/runtime/include/openvino/core/preprocess/pre_post_process.hpp:
 
 /opt/intel/openvino_2022.3.0/runtime/include/openvino/core/deprecated.hpp:
@@ -9216,44 +9269,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/torch/csrc/jit/api/module.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/deg2rad_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/special_xlog1py_ops.h:
-
-/usr/include/c++/9/bits/atomic_base.h:
-
-/usr/include/c++/9/vector:
-
-/home/ss21mipt/libtorch/include/ATen/ops/rshift_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/miopen_convolution_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_convolution_mode.h:
-
-/usr/include/c++/9/experimental/bits/lfts_config.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/reflection_pad3d.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/randn_like_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/core/Dict.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_batch_norm_impl_index_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/select_scatter_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/randint_like_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_assert_async.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/rsqrt_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/to_sparse_csr_ops.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/9/include/syslimits.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/nansum_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/binary_cross_entropy_with_logits.h:
 
 /usr/include/c++/9/bits/alloc_traits.h:
 
@@ -9343,6 +9358,22 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/_make_dual_copy_ops.h:
 
+/home/ss21mipt/libtorch/include/ATen/ops/_adaptive_avg_pool2d_backward_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/dist_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/quantized_batch_norm_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/detail/ORTHooksInterface.h:
+
+/usr/include/c++/9/cerrno:
+
+/home/ss21mipt/libtorch/include/ATen/ops/replication_pad1d_meta.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/linalg_lu_solve_native.h:
+
+/usr/include/x86_64-linux-gnu/bits/uio_lim.h:
+
 /usr/include/c++/9/functional:
 
 /home/ss21mipt/libtorch/include/ATen/ops/log2_native.h:
@@ -9394,12 +9425,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /usr/include/x86_64-linux-gnu/c++/9/bits/ctype_inline.h:
 
 /usr/include/c++/9/bits/locale_facets.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/repeat_interleave.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_adaptive_avg_pool2d_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/linalg_eig_ops.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
 
@@ -9531,30 +9556,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /usr/include/stdlib.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/transpose_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/mT_native.h:
-
-/usr/include/c++/9/string:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_thnn_differentiable_lstm_cell_backward_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/atan_ops.h:
-
-/home/ss21mipt/libtorch/include/c10/core/DispatchKeySet.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/silu_ops.h:
-
-/usr/include/c++/9/bits/stl_map.h:
-
-/opt/intel/openvino_2022.3.0/runtime/include/openvino/core/coordinate_diff.hpp:
-
-/home/ss21mipt/libtorch/include/ATen/ops/special_erf_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_nnz_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_nested_tensor_softmax_with_shape_ops.h:
-
 /usr/include/x86_64-linux-gnu/c++/9/bits/error_constants.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/special_chebyshev_polynomial_t_ops.h:
@@ -9587,12 +9588,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/chain_matmul_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/dsplit.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_foreach_ceil_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_copy_from_ops.h:
-
 /home/ss21mipt/libtorch/include/ATen/ops/coalesce_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/topk_ops.h:
@@ -9604,10 +9599,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/upsample_nearest3d_backward_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/logit_backward_ops.h:
-
-/home/ss21mipt/libtorch/include/c10/util/ExclusivelyOwned.h:
-
-/usr/include/x86_64-linux-gnu/bits/errno.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/sparse_sampled_addmm.h:
 
@@ -9622,6 +9613,20 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/corrcoef_ops.h:
 
 /usr/include/time.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/repeat_interleave.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/linalg_eig_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/_adaptive_avg_pool2d_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/_batch_norm_impl_index_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/select_scatter_ops.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdio.h:
+
+/home/ss21mipt/libtorch/include/c10/util/qint8.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/native_group_norm_native.h:
 
@@ -9644,6 +9649,12 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/_empty_per_channel_affine_quantized_native.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_aminmax.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/sgn.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/digamma_ops.h:
+
+/usr/include/x86_64-linux-gnu/bits/select2.h:
 
 /usr/include/c++/9/bits/stl_iterator_base_funcs.h:
 
@@ -9719,27 +9730,49 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /usr/include/x86_64-linux-gnu/bits/waitstatus.h:
 
-/usr/include/c++/9/cerrno:
-
-/home/ss21mipt/libtorch/include/ATen/ops/replication_pad1d_meta.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/linalg_lu_solve_native.h:
-
-/usr/include/x86_64-linux-gnu/bits/uio_lim.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_adaptive_avg_pool2d_backward_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/dist_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/quantized_batch_norm_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/detail/ORTHooksInterface.h:
-
 /home/ss21mipt/libtorch/include/ATen/ops/log2_meta.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_foreach_cos_native.h:
 
 /usr/include/x86_64-linux-gnu/bits/waitflags.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/_unique2.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/floor_divide.h:
+
+/usr/include/alloca.h:
+
+/usr/include/c++/9/type_traits:
+
+/home/ss21mipt/libtorch/include/ATen/ops/special_ndtr.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/tril_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/_copy_from_and_resize.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/convolution_backward_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/angle.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/linalg_matrix_exp.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/sin_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/align_to.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/fractional_max_pool2d_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/hypot_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/core/NamedTensor.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/empty_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/special_entr_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/core/ivalue_to.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/_sparse_csr_tensor_unsafe_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/xlogy_meta.h:
 
@@ -9767,6 +9800,14 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/_nested_sum_backward.h:
 
+/home/ss21mipt/libtorch/include/ATen/ops/div_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/max_pool2d_with_indices_backward.h:
+
+/usr/include/c++/9/ctime:
+
+/home/ss21mipt/libtorch/include/ATen/ops/_fused_adam.h:
+
 /usr/local/include/opencv4/opencv2/core/mat.inl.hpp:
 
 /home/ss21mipt/libtorch/include/ATen/ops/special_modified_bessel_k1_meta.h:
@@ -9778,6 +9819,10 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/multiply_native.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h:
+
+/usr/include/x86_64-linux-gnu/bits/wchar2.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/stft_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/max_ops.h:
 
@@ -9907,6 +9952,16 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/_test_optional_intlist.h:
 
+/home/ss21mipt/libtorch/include/ATen/ops/index_add_ops.h:
+
+/usr/include/c++/9/deque:
+
+/usr/include/x86_64-linux-gnu/bits/fp-logb.h:
+
+/home/ss21mipt/libtorch/include/ATen/core/List.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/linalg_eigh_ops.h:
+
 /usr/include/c++/9/bits/ptr_traits.h:
 
 /home/ss21mipt/libtorch/include/ATen/core/grad_mode.h:
@@ -9940,6 +9995,12 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/as_strided_copy.h:
 
 /usr/include/c++/9/bits/localefwd.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/fft_fftshift_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/new_ones.h:
+
+/usr/include/ctype.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/replication_pad1d_backward_meta.h:
 
@@ -9995,12 +10056,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /usr/include/c++/9/bits/shared_ptr_base.h:
 
-/usr/include/c++/9/type_traits:
-
-/home/ss21mipt/libtorch/include/ATen/ops/floor_divide.h:
-
-/usr/include/alloca.h:
-
 /usr/include/c++/9/bits/stl_pair.h:
 
 /usr/include/c++/9/bits/unordered_map.h:
@@ -10020,6 +10075,12 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/dequantize_ops.h:
 
 /usr/include/c++/9/cstdio:
+
+/home/ss21mipt/libtorch/include/ATen/ops/flatten_dense_tensors_ops.h:
+
+/usr/include/c++/9/bits/stl_tempbuf.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/adaptive_avg_pool2d.h:
 
 /usr/include/c++/9/stdexcept:
 
@@ -10067,6 +10128,12 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
 
+/home/ss21mipt/libtorch/include/ATen/ops/rrelu_with_noise_backward_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/random_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/orgqr_ops.h:
+
 /home/ss21mipt/libtorch/include/ATen/ops/indices_copy_native.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
@@ -10100,14 +10167,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /opt/intel/openvino_2022.3.0/runtime/include/ngraph/op/result.hpp:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_indices_ops.h:
-
-/usr/include/x86_64-linux-gnu/bits/posix2_lim.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/linalg_tensorinv_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/new_zeros_ops.h:
-
-/usr/include/linux/limits.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/native_batch_norm_backward_ops.h:
 
@@ -10162,6 +10221,12 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/special_multigammaln_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/clamp_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/new_zeros.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/is_floating_point.h:
+
+/usr/include/c++/9/bits/basic_ios.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/fft_irfft2.h:
 
@@ -10273,8 +10338,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/_adaptive_avg_pool3d.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/stft_ops.h:
-
 /usr/include/x86_64-linux-gnu/bits/typesizes.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/trunc_native.h:
@@ -10285,6 +10348,14 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
 
+/home/ss21mipt/libtorch/include/ATen/ops/_thnn_differentiable_lstm_cell_backward_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/atan_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/mT_native.h:
+
+/usr/include/c++/9/string:
+
 /home/ss21mipt/libtorch/include/ATen/ops/mkldnn_rnn_layer_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/unsafe_chunk_native.h:
@@ -10292,6 +10363,8 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /usr/include/c++/9/limits:
 
 /home/ss21mipt/libtorch/include/ATen/ops/negative.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/isneginf.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/instance_norm_native.h:
 
@@ -10304,8 +10377,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /usr/include/limits.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/clamp_max.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/isneginf.h:
 
 /usr/include/c++/9/unordered_set:
 
@@ -10322,6 +10393,12 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/_nnpack_available.h:
 
 /home/ss21mipt/libtorch/include/c10/util/Flags.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/fbgemm_pack_quantized_matrix.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/diagonal_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/TensorGeometry.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_linalg_solve_ex.h:
 
@@ -10366,6 +10443,20 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/aminmax_ops.h:
 
 /usr/include/x86_64-linux-gnu/bits/local_lim.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/silu_ops.h:
+
+/usr/include/c++/9/bits/stl_map.h:
+
+/home/ss21mipt/libtorch/include/c10/core/DispatchKeySet.h:
+
+/opt/intel/openvino_2022.3.0/runtime/include/openvino/core/coordinate_diff.hpp:
+
+/home/ss21mipt/libtorch/include/ATen/ops/special_erf_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/_nnz_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/_nested_tensor_softmax_with_shape_ops.h:
 
 /home/ss21mipt/libtorch/include/c10/core/TensorImpl.h:
 
@@ -10501,48 +10592,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/mkldnn_adaptive_avg_pool2d_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/_foreach_tanh_ops.h:
-
-/usr/include/c++/9/math.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_fused_adamw_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/flatten_dense_tensors_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/adaptive_avg_pool2d.h:
-
-/usr/include/c++/9/bits/stl_tempbuf.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/sin_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/align_to.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/special_ndtr.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/tril_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_copy_from_and_resize.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/convolution_backward_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/angle.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/linalg_matrix_exp.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/fractional_max_pool2d_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/hypot_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/core/NamedTensor.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/empty_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/special_entr_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/core/ivalue_to.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_sparse_csr_tensor_unsafe_ops.h:
-
 /home/ss21mipt/libtorch/include/ATen/ops/retains_grad_native.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:
@@ -10586,8 +10635,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/im2col_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/masked_scatter.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_unique2.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_neg_view_ops.h:
 
@@ -10655,19 +10702,15 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/_has_same_storage_numel_ops.h:
 
-/usr/include/x86_64-linux-gnu/bits/locale.h:
+/usr/include/x86_64-linux-gnu/bits/errno.h:
 
-/home/ss21mipt/libtorch/include/ATen/core/function_schema_inl.h:
+/home/ss21mipt/libtorch/include/c10/util/ExclusivelyOwned.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/diagonal.h:
+/home/ss21mipt/libtorch/include/ATen/ops/transpose_ops.h:
 
-/usr/local/include/opencv4/opencv2/flann/config.h:
+/home/ss21mipt/libtorch/include/ATen/ops/broadcast_tensors_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/frac_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/miopen_convolution_relu.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/fake_quantize_per_tensor_affine_cachemask_backward_ops.h:
+/usr/include/c++/9/debug/assertions.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/subtract_native.h:
 
@@ -10815,12 +10858,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/mkldnn_reorder_conv3d_weight_ops.h:
 
-/usr/include/strings.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_foreach_mul_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/diag_ops.h:
-
 /home/ss21mipt/libtorch/include/ATen/ops/_to_cpu.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_efficient_attention_backward.h:
@@ -10834,6 +10871,28 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/special_i1e_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/mkldnn_max_pool2d_backward_ops.h:
+
+/usr/include/x86_64-linux-gnu/bits/locale.h:
+
+/home/ss21mipt/libtorch/include/ATen/core/function_schema_inl.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/diagonal.h:
+
+/usr/local/include/opencv4/opencv2/flann/config.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/frac_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/miopen_convolution_relu.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/fake_quantize_per_tensor_affine_cachemask_backward_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/new_zeros_ops.h:
+
+/usr/include/linux/limits.h:
+
+/usr/include/x86_64-linux-gnu/bits/posix2_lim.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/linalg_tensorinv_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/linalg_matrix_power.h:
 
@@ -10901,16 +10960,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/index_add_ops.h:
-
-/usr/include/c++/9/deque:
-
-/usr/include/x86_64-linux-gnu/bits/fp-logb.h:
-
-/home/ss21mipt/libtorch/include/ATen/core/List.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/linalg_eigh_ops.h:
-
 /home/ss21mipt/libtorch/include/ATen/ops/matrix_power_ops.h:
 
 /usr/local/include/opencv4/opencv2/dnn/version.hpp:
@@ -10946,6 +10995,10 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/linalg_vander_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/clamp_min_ops.h:
+
+/opt/intel/openvino_2022.3.0/runtime/include/openvino/pass/pass.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/stft_native.h:
 
@@ -11101,8 +11154,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/c10/util/qint32.h:
 
-/home/ss21mipt/libtorch/include/c10/util/qint8.h:
-
 /home/ss21mipt/libtorch/include/ATen/ops/special_hermite_polynomial_he_ops.h:
 
 /home/ss21mipt/libtorch/include/c10/util/flat_hash_map.h:
@@ -11112,12 +11163,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/arccos.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/broadcast_tensors.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/glu_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/fft_irfftn_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/_foreach_trunc.h:
 
 /home/ss21mipt/libtorch/include/c10/core/SymNodeImpl.h:
 
@@ -11149,12 +11194,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/log_sigmoid_forward.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/diagonal_scatter_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/diff_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/linalg_lu_ops.h:
-
 /usr/local/include/opencv4/opencv2/flann/autotuned_index.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_foreach_sin_ops.h:
@@ -11178,10 +11217,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/batch_norm_stats_native.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_test_check_tensor.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/tril_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/nextafter.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/lcm_native.h:
 
@@ -11213,12 +11248,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/fmax_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/fbgemm_pack_quantized_matrix.h:
-
-/home/ss21mipt/libtorch/include/ATen/TensorGeometry.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/diagonal_ops.h:
-
 /home/ss21mipt/libtorch/include/c10/core/impl/HermeticPyObjectTLS.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_use_cudnn_ctc_loss_ops.h:
@@ -11234,10 +11263,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/upsample_nearest1d_backward_native.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_thnn_differentiable_lstm_cell_backward.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/index_select_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/nll_loss.h:
 
 /home/ss21mipt/libtorch/include/c10/util/Logging.h:
 
@@ -11363,6 +11388,12 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/empty_quantized.h:
 
+/home/ss21mipt/libtorch/include/ATen/ops/msort_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/diff_ops.h:
+
+/usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
+
 /home/ss21mipt/libtorch/include/torch/csrc/autograd/saved_variable_hooks.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/reflection_pad2d.h:
@@ -11434,6 +11465,36 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/sigmoid_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_sparse_softmax_backward_data.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/conj.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/divide_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/column_stack.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/einsum_native.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/cudnn_grid_sampler_backward_native.h:
+
+/home/ss21mipt/libtorch/include/c10/core/impl/LocalDispatchKeySet.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/group_norm.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/nuclear_norm_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/nll_loss_nd.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/error_t.h:
+
+/usr/include/c++/9/bits/locale_facets_nonio.tcc:
+
+/home/ss21mipt/libtorch/include/ATen/ops/_validate_sparse_csc_tensor_args_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/linalg_cholesky_ex_ops.h:
+
+/usr/include/x86_64-linux-gnu/bits/time64.h:
+
+/home/ss21mipt/libtorch/include/ATen/core/qualified_name.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_backward_ops.h:
 
@@ -11570,6 +11631,12 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/_cudnn_init_dropout_state.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/native_layer_norm_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/isposinf_meta.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/lift_fresh_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/mm_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/to_native.h:
 
@@ -11751,6 +11818,8 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/unflatten_dense_tensors_ops.h:
 
+/usr/include/x86_64-linux-gnu/bits/stdlib.h:
+
 /home/ss21mipt/libtorch/include/ATen/ops/fft_rfft.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/cumsum_ops.h:
@@ -11769,65 +11838,53 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/det_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/msort_native.h:
+/home/ss21mipt/libtorch/include/ATen/ops/_foreach_sub_ops.h:
 
-/usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
+/home/ss21mipt/libtorch/include/ATen/ops/_cdist_backward_native.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/diff_ops.h:
+/home/ss21mipt/libtorch/include/ATen/ops/_transformer_encoder_layer_fwd.h:
 
-/usr/local/include/opencv4/opencv2/stitching/detail/motion_estimators.hpp:
+/home/ss21mipt/libtorch/include/ATen/ops/_foreach_tan.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/sub_meta.h:
+/home/ss21mipt/libtorch/include/ATen/ops/_foreach_ceil_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/_test_optional_floatlist_ops.h:
+/home/ss21mipt/libtorch/include/ATen/ops/_copy_from_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/sgn.h:
+/home/ss21mipt/libtorch/include/ATen/ops/dsplit.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/digamma_ops.h:
+/home/ss21mipt/libtorch/include/ATen/ops/log1p_native.h:
 
-/usr/include/c++/9/ctime:
+/home/ss21mipt/libtorch/include/ATen/ops/elu_backward.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/_fused_adam.h:
+/home/ss21mipt/libtorch/include/ATen/ops/linalg_lu_factor_ex_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/div_ops.h:
+/home/ss21mipt/libtorch/include/ATen/ops/_cast_Byte_native.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/isposinf_meta.h:
+/home/ss21mipt/libtorch/include/ATen/ops/_native_decoder_only_multi_head_attention.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/mm_ops.h:
+/usr/include/x86_64-linux-gnu/bits/mathinline.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/lift_fresh_ops.h:
+/home/ss21mipt/libtorch/include/ATen/ops/_foreach_tanh.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/max_pool2d_with_indices_backward.h:
+/home/ss21mipt/libtorch/include/ATen/ops/_foreach_tanh_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/nuclear_norm_ops.h:
+/usr/include/c++/9/math.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/nll_loss_nd.h:
+/home/ss21mipt/libtorch/include/ATen/ops/_fused_adamw_ops.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/error_t.h:
+/home/ss21mipt/libtorch/include/ATen/ops/glu_native.h:
 
-/usr/include/c++/9/bits/locale_facets_nonio.tcc:
+/home/ss21mipt/libtorch/include/ATen/ops/fft_irfftn_native.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/_validate_sparse_csc_tensor_args_ops.h:
+/home/ss21mipt/libtorch/include/ATen/ops/_foreach_trunc.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/linalg_cholesky_ex_ops.h:
+/home/ss21mipt/libtorch/include/ATen/ops/neg.h:
 
-/usr/include/x86_64-linux-gnu/bits/time64.h:
+/home/ss21mipt/libtorch/include/ATen/ops/_foreach_trunc_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/core/qualified_name.h:
+/home/ss21mipt/libtorch/include/ATen/ops/is_same_size_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/conj.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/divide_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/column_stack.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/einsum_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/cudnn_grid_sampler_backward_native.h:
-
-/home/ss21mipt/libtorch/include/c10/core/impl/LocalDispatchKeySet.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/group_norm.h:
+/home/ss21mipt/libtorch/include/ATen/ops/_foreach_zero.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_foreach_zero_ops.h:
 
@@ -12046,10 +12103,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/_is_all_true_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/linalg_solve.h:
-
-/opt/intel/openvino_2022.3.0/runtime/include/openvino/core/preprocess/preprocess_steps.hpp:
-
-/home/ss21mipt/libtorch/include/ATen/ops/nested_to_padded_tensor_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_mps_convolution_transpose_ops.h:
 
@@ -12363,8 +12416,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/_sparse_csc_tensor_unsafe_ops.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/new_empty.h:
-
 /home/ss21mipt/libtorch/include/ATen/ops/_sparse_log_softmax.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_sparse_log_softmax_ops.h:
@@ -12517,9 +12568,9 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/_test_serialization_subcmul.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/_foreach_tan_ops.h:
-
 /home/ss21mipt/libtorch/include/ATen/ops/_autocast_to_reduced_precision_ops.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/_foreach_tan_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/bitwise_xor.h:
 
@@ -13035,10 +13086,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/bmm.h:
 
-/usr/include/c++/9/debug/assertions.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/broadcast_tensors_ops.h:
-
 /home/ss21mipt/libtorch/include/ATen/ops/rename.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_rowwise_prune_ops.h:
@@ -13267,6 +13314,12 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/cudnn_convolution_relu.h:
 
+/home/ss21mipt/libtorch/include/ATen/ops/resize.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/kthvalue.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/cudnn_convolution_relu_ops.h:
+
 /home/ss21mipt/libtorch/include/ATen/ops/cudnn_grid_sampler_backward.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/frac.h:
@@ -13333,6 +13386,8 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/_cast_Long_ops.h:
 
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:
+
 /home/ss21mipt/libtorch/include/ATen/ops/fft_fftfreq_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/einsum.h:
@@ -13384,6 +13439,10 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/gru_cell_ops.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/moveaxis.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/gelu.h:
+
+/home/ss21mipt/libtorch/include/ATen/ops/erfinv.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/exp2.h:
 
@@ -13653,10 +13712,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/ge.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/erfinv.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/gelu.h:
-
 /home/ss21mipt/libtorch/include/ATen/ops/rnn_relu_native.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/multilabel_margin_loss_backward.h:
@@ -13841,12 +13896,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 
 /home/ss21mipt/libtorch/include/ATen/ops/istft.h:
 
-/home/ss21mipt/libtorch/include/ATen/ops/resize.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/cudnn_convolution_relu_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/kthvalue.h:
-
 /home/ss21mipt/libtorch/include/ATen/ops/special_digamma.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/l1_loss.h:
@@ -13886,8 +13935,6 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/linalg_eigh.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/linalg_eigvals_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/new_full.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/_rowwise_prune_native.h:
 
@@ -14346,23 +14393,3 @@ CMakeFiles/detect_YOLOv8_IR.dir/detect_YOLOv8_IR.cpp.o: ../detect_YOLOv8_IR.cpp 
 /home/ss21mipt/libtorch/include/ATen/ops/unbind_copy.h:
 
 /home/ss21mipt/libtorch/include/ATen/ops/native_norm_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/nested_to_padded_tensor.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/not_equal_native.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/narrow_ops.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/new_empty_strided.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/fft_fftshift_native.h:
-
-/usr/include/ctype.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/new_ones.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/is_floating_point.h:
-
-/usr/include/c++/9/bits/basic_ios.h:
-
-/home/ss21mipt/libtorch/include/ATen/ops/new_zeros.h:

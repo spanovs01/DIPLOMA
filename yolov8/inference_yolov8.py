@@ -140,12 +140,13 @@ def inference(model_xml_path, im_path):
     compiled_model = ie.compile_model(model=model, device_name=device)
     print("INPUT TENSOR ", compiled_model.input().shape, compiled_model.output(0).shape)#, compiled_model.output(1).shape, type(compiled_model))
     cam = cv2.VideoCapture(0)
+    # cam = cv2.VideoCapture('/home/ss21mipt/DIPLOMA/test_data/sahr5/video.avi')
     key = cv2.waitKey(1)
 
     while key != 27:
-        # _, image = cam.read()
-        # cv2.imshow("source", image)
-        image = cv2.imread(im_path)
+        _, image = cam.read()
+        cv2.imshow("source", image)
+        # image = cv2.imread(im_path)
         image = cv2.resize(image, (640,640), interpolation=cv2.INTER_LINEAR)
         im = np.expand_dims(image, axis=0)
         im_for_draw = image
