@@ -172,8 +172,17 @@ std::vector<Detection_mask> parsing_boxes(cv::Mat image, auto out_data1, auto bo
 
 int main()
 {
-    std::time_t time4;
-    std::time_t time5;
+    std::time_t times0;
+    std::time_t times1;
+    std::time_t times2;
+    std::time_t times3;
+    std::time_t times4;
+    std::time_t times5;
+    std::time_t times6;
+    std::time_t times7;
+    std::time_t time0;
+    std::time_t time1;
+    
     // auto xml = "/home/ss21mipt/Documents/starkit/DIPLOMA/YOEO/config/IR&onnx_for_416_Petr_1/yoeo.xml";
     // auto xml = "/home/ss21mipt/Documents/starkit/DIPLOMA/to_rhoban/weights/Feds_yolov8_2_openvino/best.xml";
     auto xml = "/home/ss21mipt/DIPLOMA/weights/best_openvino_model/best.xml";
@@ -232,7 +241,7 @@ int main()
         // std::cout << "SIZES of Mat: "  << image.size[0] << " " << image.size[1] << " " << image.channels()<<  std::endl;
   
         // FILLING THE DATA1
-        time4 = std::time(nullptr);
+        
         for (size_t row = 0; row < m_inputH; row++) {
             for (size_t col = 0; col < m_inputW; col++) {
                 for (size_t ch = 0; ch < m_numChannels; ch++) {
@@ -242,9 +251,7 @@ int main()
                 }
             }
         }
-        time5 = std::time(nullptr);
 
-        std::cout << "filling data1: " << time5 -time4 << std::endl;
 
         infer_request.infer();
 
@@ -264,10 +271,10 @@ int main()
         
 
         // PARSING BOXES
-
+        std::time(&time0);
         std::vector<Detection_mask> detections = parsing_boxes(image, out_data1, box_shape1, box_type, modelScoreThreshold, modelNMSThreshold, number_classes, name_classes);
-
-
+        std::time(&time1);
+        std::cout << "parsing_boxes: "<< time1-time0 << std::endl;
         // PARSING SEGMENTATION
 
 
@@ -289,6 +296,7 @@ int main()
         auto image_shape = {640,640};
         int detections_num = detections.size();
         // std::cout << "Number of detections:" << detections_num << std::endl;
+        std::time(&times0);
         if (detections_num) {
             auto options = torch::TensorOptions().dtype(torch::kFloat32);
             // torch::Tensor proto = torch::zeros({32,160,160});
@@ -296,6 +304,7 @@ int main()
             // std::cout << "PROTO FILLED" << std::endl;
             mask_in = torch::zeros({detections_num, 32}, {torch::kFloat32});
             rect = torch::zeros({detections_num, 4}, {torch::kFloat32});
+            std::time(&times2);
             for(int num = 0; num < detections_num; num++) {
                 for(int mask_elem = 0; mask_elem < 32; mask_elem++) {
                     mask_in[num][mask_elem] = *(detections[num].mask + mask_elem);
@@ -308,8 +317,8 @@ int main()
                 // std::cout << "Rect elements!!! = " << rect[num][0] << " " << rect[num][1] << " " << rect[num][2] << " " << rect[num][3] << " " <<std::endl;
                 
             }
-            // std::cout << "MASK_IN AND RECT FILLED" << std::endl;
-            
+            std::time(&times3);
+            std::cout << "starting segmentation: " << times3 -times2 << std::endl;
             mask_in_m = proto.view({32, 25600});
 
             matrix_multi = torch::mm(mask_in, mask_in_m);
@@ -321,19 +330,22 @@ int main()
             // std::cout << "R and C shapes: " << r.sizes() << " " << c.sizes() << std::endl;
             auto maxim = 0;
             auto minim = 250;
+            std::time(&times4);
+            std::cout <<"detections cout " << detections_num * 160 * 160 << std::endl;
             for(int num = 0; num < detections_num; num++) {
                 for (int h = 0; h < 160; h++) {
                     for (int w = 0; w < 160; w++) {
-                        if (((r[0][0][w].item<float>() >= bbs[0][num][0].item<float>()) && (r[0][0][w].item<float>() < bbs[2][num][0].item<float>()) && (c[0][h][0].item<float>() >= bbs[1][num][0].item<float>()) && (c[0][h][0].item<float>() < bbs[3][num][0].item<float>())) == false) {
+                        if ((((r[0][0][w].ge(bbs[0][num][0])).__and__(r[0][0][w].lt(bbs[2][num][0])).__and__(c[0][h][0].ge(bbs[1][num][0])).__and__(c[0][h][0].lt(bbs[3][num][0]))).item<bool>()) == false) {
                             matrix_multi_3d[num][h][w] = 0;    
                         }
                     }
                 }
             }
-
+            std::time(&times5);
+            std::cout << "middle segmentation: " << times5 -times4 << std::endl;
             
             // std::cout << "matrix_multi_3d " << matrix_multi_3d.sizes() << " Rect " << rect.sizes() << std::endl;
-            
+            std::time(&times6);
             for(int num = 0; num < detections_num; num++) {
                 test_masks.push_back(cv::Mat::zeros(160, 160, CV_32FC1));
                 for(size_t i=0; i<160; i++){
@@ -345,6 +357,8 @@ int main()
                     cv::bitwise_or(test_masks[num], test_masks[num-1], test_masks[num]);
                 }
             }
+            std::time(&times7);
+            std::cout << "last segmentation: " << times7 - times6 << std::endl;
 
             for (int i = 0; i < detections_num; ++i)
             {
@@ -370,6 +384,8 @@ int main()
             }
             cv::resize(test_masks[detections_num-1], test_masks[detections_num-1], scale);
         }
+        std::time(&times1);
+        std::cout << "parsing_segmentation: "<< times1-times0 << std::endl;
         cv::imshow("webcam", image);
         // cv::imshow("test_mask", test_mask);
         if(detections_num) {
