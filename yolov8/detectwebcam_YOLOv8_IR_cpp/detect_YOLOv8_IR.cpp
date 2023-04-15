@@ -229,8 +229,8 @@ int main()
     std::string name_classes = "g";
 
     while (cap.isOpened()){
-        cap >> image;
-        // image = cv::imread(png);
+        // cap >> image;
+        image = cv::imread(png);
         // std::cout << "doshlo" << std::endl;
         if (image.empty() || !image.data) {
             return false;
@@ -331,11 +331,11 @@ int main()
             auto maxim = 0;
             auto minim = 250;
             std::time(&times4);
-            std::cout <<"detections cout " << detections_num * 160 * 160 << std::endl;
+            // std::cout <<"detections cout " << detections_num * 160 * 160 << std::endl;
             for(int num = 0; num < detections_num; num++) {
                 for (int h = 0; h < 160; h++) {
                     for (int w = 0; w < 160; w++) {
-                        if ((((r[0][0][w].ge(bbs[0][num][0])).__and__(r[0][0][w].lt(bbs[2][num][0])).__and__(c[0][h][0].ge(bbs[1][num][0])).__and__(c[0][h][0].lt(bbs[3][num][0]))).item<bool>()) == false) {
+                        if ((  torch::__and__( (torch::__and__(torch::ge(r[0][0][w], bbs[0][num][0]), torch::lt(r[0][0][w], bbs[2][num][0])) ) , ( torch::__and__(torch::ge(c[0][h][0], bbs[1][num][0]), torch::lt(c[0][h][0], bbs[3][num][0])) ))  ).item<bool>() == false) {
                             matrix_multi_3d[num][h][w] = 0;    
                         }
                     }
