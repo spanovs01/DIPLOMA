@@ -8,6 +8,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <chrono>
 
 
 struct Detection
@@ -28,7 +29,6 @@ struct Detection_mask
     cv::Rect box{};
     float * mask;
 };
-
 
 
 std::vector<Detection_mask> parsing_boxes(cv::Mat image, auto out_data1, auto box_shape1, auto box_type, float modelScoreThreshold, float modelNMSThreshold, int number_classes, std::string &name_classes) {
@@ -182,6 +182,7 @@ int main()
     std::time_t times7;
     std::time_t time0;
     std::time_t time1;
+
     
     // auto xml = "/home/ss21mipt/Documents/starkit/DIPLOMA/YOEO/config/IR&onnx_for_416_Petr_1/yoeo.xml";
     // auto xml = "/home/ss21mipt/Documents/starkit/DIPLOMA/to_rhoban/weights/Feds_yolov8_2_openvino/best.xml";
@@ -219,6 +220,7 @@ int main()
     cv::Mat image;
     cv::Mat segments;
     cv::Mat mask;
+    cv::Mat* img;
     cv::Mat test_mask;
     // std::cout << "doshlo" << std::endl;
     bool yolov8;
@@ -229,8 +231,8 @@ int main()
     std::string name_classes = "g";
 
     while (cap.isOpened()){
-        // cap >> image;
-        image = cv::imread(png);
+        cap >> image;
+        // image = cv::imread(png);
         // std::cout << "doshlo" << std::endl;
         if (image.empty() || !image.data) {
             return false;
@@ -252,6 +254,9 @@ int main()
             }
         }
 
+        // img = data1;
+
+        // image.convertTo(*img, CV_32FC3, 1.0/255.0);
 
         infer_request.infer();
 
@@ -292,6 +297,10 @@ int main()
         std::vector<cv::Mat> test_masks;
         cv::Mat many_masks;
         cv::Mat test_mask_pred;
+        torch::Tensor tr = torch::tensor(true);
+        torch::Tensor fl = torch::tensor(false);
+        torch::Tensor zer_mask;
+        
         // auto segment_shape;
         auto image_shape = {640,640};
         int detections_num = detections.size();
@@ -304,7 +313,8 @@ int main()
             // std::cout << "PROTO FILLED" << std::endl;
             mask_in = torch::zeros({detections_num, 32}, {torch::kFloat32});
             rect = torch::zeros({detections_num, 4}, {torch::kFloat32});
-            std::time(&times2);
+            std::chrono::milliseconds times2 = std::chrono::duration_cast< std::chrono::milliseconds >(
+            std::chrono::system_clock::now().time_since_epoch());
             for(int num = 0; num < detections_num; num++) {
                 for(int mask_elem = 0; mask_elem < 32; mask_elem++) {
                     mask_in[num][mask_elem] = *(detections[num].mask + mask_elem);
@@ -317,8 +327,9 @@ int main()
                 // std::cout << "Rect elements!!! = " << rect[num][0] << " " << rect[num][1] << " " << rect[num][2] << " " << rect[num][3] << " " <<std::endl;
                 
             }
-            std::time(&times3);
-            std::cout << "starting segmentation: " << times3 -times2 << std::endl;
+            std::chrono::milliseconds times3 = std::chrono::duration_cast< std::chrono::milliseconds >(
+            std::chrono::system_clock::now().time_since_epoch());
+            std::cout << "starting segmentation: " << std::chrono::duration_cast<std::chrono::milliseconds>(times3 - times2).count() << std::endl;
             mask_in_m = proto.view({32, 25600});
 
             matrix_multi = torch::mm(mask_in, mask_in_m);
@@ -332,15 +343,48 @@ int main()
             auto minim = 250;
             std::time(&times4);
             // std::cout <<"detections cout " << detections_num * 160 * 160 << std::endl;
+            
+            // int fx = 0;
+            // int fy = 0;
+            // for(int num = 0; num < detections_num; num++) {
+            //     for (int h = 0; h < 160; h++) {
+            //         for (int w = 0; w < 160; w++) {
+            // //             // std::cout << "HYETA" << torch::equal(torch::ge(r[0][0][w], bbs[0][num][0]), fl) << std::endl;
+            //             if ((  torch::__and__( (torch::__and__(torch::ge(r[0][0][w], bbs[0][num][0]), torch::lt(r[0][0][w], bbs[2][num][0])) ) , ( torch::__and__(torch::ge(c[0][h][0], bbs[1][num][0]), torch::lt(c[0][h][0], bbs[3][num][0])) ))  )[0] == fl) {
+            //                 // matrix_multi_3d[num][h][w] = 0;
+            //                 continue;   
+            //             }
+
+            //             // if (((torch::equal(torch::ge(r[0][0][w], bbs[0][num][0]), fl)) == 1) && (fx == 0)) {
+            //             //     matrix_multi_3d[num][h][w] = 0;
+            //             //     fx = 1;
+            //             // }
+            //             // else if (((torch::equal(torch::lt(r[0][0][w], bbs[2][num][0]), fl)) == 1) && (fx == 1)) {
+            //             //     matrix_multi_3d[num][h][w] = 0;
+            //             // }
+            //             // else if (((torch::equal(torch::ge(c[0][h][0], bbs[1][num][0]), fl)) == 1) && (fy == 0)) {
+            //             //     matrix_multi_3d[num][h][w] = 0;
+            //             //     fy = 1;
+            //             // }
+            //             // else if (((torch::equal(torch::lt(c[0][h][0], bbs[3][num][0]), fl)) == 1) && (fy == 1)) {
+            //             //     matrix_multi_3d[num][h][w] = 0;
+            //             // }
+            //         }
+            //         // fx = 0;
+            //     }
+            //     // fy = 0;
+            // }
+            zer_mask = torch::zeros({detections_num, 160, 160});
             for(int num = 0; num < detections_num; num++) {
-                for (int h = 0; h < 160; h++) {
-                    for (int w = 0; w < 160; w++) {
-                        if ((  torch::__and__( (torch::__and__(torch::ge(r[0][0][w], bbs[0][num][0]), torch::lt(r[0][0][w], bbs[2][num][0])) ) , ( torch::__and__(torch::ge(c[0][h][0], bbs[1][num][0]), torch::lt(c[0][h][0], bbs[3][num][0])) ))  ).item<bool>() == false) {
-                            matrix_multi_3d[num][h][w] = 0;    
-                        }
-                    }
+                for (int h=bbs[1][num][0].item<int>(); h < bbs[3][num][0].item<int>(); h++)
+                {
+                    for (int w=bbs[0][num][0].item<int>(); w < bbs[2][num][0].item<int>(); w++)
+                    {
+                        zer_mask[num][h][w] = matrix_multi_3d[num][h][w];
+                    }    
                 }
             }
+            
             std::time(&times5);
             std::cout << "middle segmentation: " << times5 -times4 << std::endl;
             
@@ -350,7 +394,7 @@ int main()
                 test_masks.push_back(cv::Mat::zeros(160, 160, CV_32FC1));
                 for(size_t i=0; i<160; i++){
                     for(size_t j=0; j<160; j++){
-                        test_masks[num].at<float>(j,i) = (float)(matrix_multi_3d[num][j][i].item<float>());
+                        test_masks[num].at<float>(j,i) = (float)(zer_mask[num][j][i].item<float>());
                     } 
                 }
                 if (num > 0) {

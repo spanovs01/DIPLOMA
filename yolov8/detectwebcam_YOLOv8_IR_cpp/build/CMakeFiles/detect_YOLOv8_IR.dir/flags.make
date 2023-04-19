@@ -6,5 +6,5 @@ CXX_DEFINES = -DIE_THREAD=IE_THREAD_TBB -DTBB_PREVIEW_WAITING_FOR_WORKERS=1 -DUS
 
 CXX_INCLUDES = -I/home/ss21mipt/DIPLOMA/yolov8/detectwebcam_YOLOv8_IR_cpp/build -I/home/ss21mipt/DIPLOMA/yolov8/detectwebcam_YOLOv8_IR_cpp -isystem /usr/local/include/opencv4 -isystem /opt/intel/openvino_2022.3.0/runtime/include -isystem /opt/intel/openvino_2022.3.0/runtime/include/ie -isystem /home/ss21mipt/libtorch/include -isystem /home/ss21mipt/libtorch/include/torch/csrc/api/include
 
-CXX_FLAGS =  -g -O2 -Wno-error=deprecated-declarations -D_GLIBCXX_USE_CXX11_ABI=1
+CXX_FLAGS =  -g -Ofast -no-pie -Wno-error=deprecated-declarations -D_GLIBCXX_USE_CXX11_ABI=1
 
