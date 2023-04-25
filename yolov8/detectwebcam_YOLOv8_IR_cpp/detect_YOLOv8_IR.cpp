@@ -9,7 +9,10 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <algorithm>
 
+#define CLOCK std::chrono::steady_clock
+#define CLOCK_CAST std::chrono::duration_cast<std::chrono::microseconds>
 
 struct Detection
 {
@@ -27,7 +30,7 @@ struct Detection_mask
     float confidence{0.0};
     cv::Scalar color{};
     cv::Rect box{};
-    float * mask;
+    std::vector<float> mask;
 };
 
 
@@ -55,7 +58,7 @@ std::vector<Detection_mask> parsing_boxes(cv::Mat image, auto out_data1, auto bo
     // std::cout << "RESULTS are Here: " << " " <<output_boxes.channels() << output_boxes.size[0] << std::endl;
 
     auto maxim_data = 0;
-    time0 = std::time(nullptr);
+
     for(int row = 0; row < rows; row++) {
         for(int dimension = 0; dimension < dimensions; dimension++) {
     
@@ -63,10 +66,6 @@ std::vector<Detection_mask> parsing_boxes(cv::Mat image, auto out_data1, auto bo
     
         }
     }
-    time1 = std::time(nullptr);
-
-    std::cout << "Time for filling output_boxes: " << time1 - time0 << std::endl;
-    // std::cout << "RESULTS are Here: " << " " <<output_boxes.size[0] << " " << output_boxes.size[1] << " " << output_boxes.size[3] <<std::endl;
     
 
     if (dimensions > rows) // Check if the shape[2] is more than shape[1] (yolov8)
@@ -88,9 +87,9 @@ std::vector<Detection_mask> parsing_boxes(cv::Mat image, auto out_data1, auto bo
     std::vector<int> class_ids;
     std::vector<float> confidences;
     std::vector<cv::Rect> boxes;
-    std::vector<float *> detection_masks;
-    
-    time2 = std::time(nullptr);
+    std::vector<std::vector<float>> detection_masks;
+    std::vector<float> mass;
+
     for (int i = 0; i < rows; ++i)
     {
         if (yolov8)
@@ -123,15 +122,16 @@ std::vector<Detection_mask> parsing_boxes(cv::Mat image, auto out_data1, auto bo
                 // std::cout << "[left,top,wisth,height]: [" << left << ", " << top << ", " << width << ", " << height << "] confidences: " << *confidences.rbegin() << "others are :" << dimensions <<std::endl;
 
                 boxes.push_back(cv::Rect(left, top, width, height));
-                detection_masks.push_back(data + 4 + number_classes);
+                for (int index=0; index < 32; index++) {
+                    mass.push_back(*(data + 4 + number_classes + index));
+                }
+                detection_masks.push_back(mass);
+
             }
         }
 
         data += dimensions;
     }
-    time3 = std::time(nullptr);
-
-    std::cout << "Time for filling boxes and detectiond_masks: " << time3 - time2 << std::endl;
 
     std::vector<int> nms_result;
     // NMSBoxes(boxes, confidences, modelScoreThreshold, modelNMSThreshold, nms_result);
@@ -172,18 +172,10 @@ std::vector<Detection_mask> parsing_boxes(cv::Mat image, auto out_data1, auto bo
 
 int main()
 {
-    std::time_t times0;
-    std::time_t times1;
-    std::time_t times2;
-    std::time_t times3;
-    std::time_t times4;
-    std::time_t times5;
-    std::time_t times6;
-    std::time_t times7;
-    std::time_t time0;
-    std::time_t time1;
-
-    
+    std::chrono::steady_clock::time_point end_global;
+    std::chrono::steady_clock::time_point begin_global;
+    std::chrono::steady_clock::time_point begin;
+    std::chrono::steady_clock::time_point end;    
     // auto xml = "/home/ss21mipt/Documents/starkit/DIPLOMA/YOEO/config/IR&onnx_for_416_Petr_1/yoeo.xml";
     // auto xml = "/home/ss21mipt/Documents/starkit/DIPLOMA/to_rhoban/weights/Feds_yolov8_2_openvino/best.xml";
     auto xml = "/home/ss21mipt/DIPLOMA/weights/best_openvino_model/best.xml";
@@ -231,6 +223,9 @@ int main()
     std::string name_classes = "g";
 
     while (cap.isOpened()){
+        begin_global = CLOCK::now();
+
+        begin = CLOCK::now();
         cap >> image;
         // image = cv::imread(png);
         // std::cout << "doshlo" << std::endl;
@@ -239,11 +234,13 @@ int main()
         }
         cv::Size scale(640, 640);  
         cv::resize(image, image, scale);    
-        
+        end = CLOCK::now();
+        std::cout << "FPS #1 IMREAD AND PREPROC " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
         // std::cout << "SIZES of Mat: "  << image.size[0] << " " << image.size[1] << " " << image.channels()<<  std::endl;
   
         // FILLING THE DATA1
         
+        begin = CLOCK::now();
         for (size_t row = 0; row < m_inputH; row++) {
             for (size_t col = 0; col < m_inputW; col++) {
                 for (size_t ch = 0; ch < m_numChannels; ch++) {
@@ -253,13 +250,20 @@ int main()
                 }
             }
         }
+        end = CLOCK::now();
+        std::cout << "FPS #2 FORMING TENSOR AND NORMALIZATION " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+
 
         // img = data1;
 
-        // image.convertTo(*img, CV_32FC3, 1.0/255.0);
+        // image.convertTo(*img, CV_32FC3,  255.0);
 
+        begin = CLOCK::now();
         infer_request.infer();
+        end = CLOCK::now();
+        std::cout << "FPS #3 INFER " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
 
+        begin = CLOCK::now();
         ov::Tensor output_tensor1 = infer_request.get_output_tensor(0);
         ov::Tensor output_tensor2 = infer_request.get_output_tensor(1);
         
@@ -276,16 +280,15 @@ int main()
         
 
         // PARSING BOXES
-        std::time(&time0);
         std::vector<Detection_mask> detections = parsing_boxes(image, out_data1, box_shape1, box_type, modelScoreThreshold, modelNMSThreshold, number_classes, name_classes);
-        std::time(&time1);
-        std::cout << "parsing_boxes: "<< time1-time0 << std::endl;
+        end = CLOCK::now();
+        std::cout << "FPS #4 PARSING BBOXES " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+
         // PARSING SEGMENTATION
 
 
         
         // out_data2
-
         torch::Tensor proto;
         torch::Tensor mask_in;
         torch::Tensor rect;
@@ -297,148 +300,178 @@ int main()
         std::vector<cv::Mat> test_masks;
         cv::Mat many_masks;
         cv::Mat test_mask_pred;
-        torch::Tensor tr = torch::tensor(true);
-        torch::Tensor fl = torch::tensor(false);
-        torch::Tensor zer_mask;
+        cv::Mat zer_mask;
+        cv::Mat empty_mask;
+        std::vector<cv::Mat> zer_masks;
+        std::vector<cv::Mat> mat_multi_3d;
         
         // auto segment_shape;
         auto image_shape = {640,640};
         int detections_num = detections.size();
-        // std::cout << "Number of detections:" << detections_num << std::endl;
-        std::time(&times0);
+
         if (detections_num) {
+            begin = CLOCK::now();
             auto options = torch::TensorOptions().dtype(torch::kFloat32);
             // torch::Tensor proto = torch::zeros({32,160,160});
             proto = torch::from_blob(out_data2, {32,160,160}, options);
             // std::cout << "PROTO FILLED" << std::endl;
             mask_in = torch::zeros({detections_num, 32}, {torch::kFloat32});
             rect = torch::zeros({detections_num, 4}, {torch::kFloat32});
-            std::chrono::milliseconds times2 = std::chrono::duration_cast< std::chrono::milliseconds >(
-            std::chrono::system_clock::now().time_since_epoch());
+            end = CLOCK::now();
+            std::cout << "FPS #4 DATA TO TTENSOR " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+            begin = CLOCK::now();
             for(int num = 0; num < detections_num; num++) {
                 for(int mask_elem = 0; mask_elem < 32; mask_elem++) {
-                    mask_in[num][mask_elem] = *(detections[num].mask + mask_elem);
+                    mask_in[num][mask_elem] = (detections[num].mask[mask_elem]);
                     
                 }
-                rect[num][0] = detections[num].box.x * 0.25;
-                rect[num][1] = detections[num].box.y * 0.25;
-                rect[num][2] = (detections[num].box.x + detections[num].box.width) * 0.25;
-                rect[num][3] = (detections[num].box.y + detections[num].box.height) * 0.25;
+                
+                // rect[num][0] = detections[num].box.x / 4;
+                // if ((detections[num].box.x / 4) > 160)
+                //     rect[num][0] = 160;
+                // rect[num][1] = detections[num].box.y / 4;
+                // if (detections[num].box.y / 4 > 160)
+                //     rect[num][1] = 160;
+                // rect[num][2] = (detections[num].box.x + detections[num].box.width) / 4;
+                // if (((detections[num].box.x + detections[num].box.width) / 4) > 160)
+                //     rect[num][2] = 160;
+                // rect[num][3] = (detections[num].box.y + detections[num].box.height) / 4;
+                // if (((detections[num].box.y + detections[num].box.height) / 4) > 160)
+                //     rect[num][3] = 160;
+                
+                detections[num].box.x = std::clamp(detections[num].box.x / 4, 0, 160);
+                detections[num].box.y = std::clamp(detections[num].box.y / 4, 0, 160);
+
+                // detections[num].box.x = std::clampdetections[num].box.x / 4;
+                
+                // detections[num].box.y = detections[num].box.y / 4;
+                // if (detections[num].box.y> 160)
+                //     detections[num].box.y = 160;
+                detections[num].box.width = detections[num].box.width / 4;
+                if ((detections[num].box.x + detections[num].box.width) > 160 || (detections[num].box.x + detections[num].box.width) < 0)
+                    detections[num].box.width = 160 - detections[num].box.x;
+                detections[num].box.height = detections[num].box.height / 4;
+                if ((detections[num].box.y + detections[num].box.height) > 160 || (detections[num].box.y + detections[num].box.height) < 0)
+                    detections[num].box.height = 160 - detections[num].box.y;
+
+                
                 // std::cout << "Rect elements!!! = " << rect[num][0] << " " << rect[num][1] << " " << rect[num][2] << " " << rect[num][3] << " " <<std::endl;
                 
             }
-            std::chrono::milliseconds times3 = std::chrono::duration_cast< std::chrono::milliseconds >(
-            std::chrono::system_clock::now().time_since_epoch());
-            std::cout << "starting segmentation: " << std::chrono::duration_cast<std::chrono::milliseconds>(times3 - times2).count() << std::endl;
+            end = CLOCK::now();
+            std::cout << "FPS #5 TRANSFORM BBOXES " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+            
+            begin = CLOCK::now();
             mask_in_m = proto.view({32, 25600});
 
             matrix_multi = torch::mm(mask_in, mask_in_m);
             matrix_multi_3d = torch::sigmoid(matrix_multi).view({detections_num, 160, 160});
-            rect = rect.unsqueeze(2);
-            auto bbs = torch::chunk(rect, 4, 1);
-            r = torch::arange(160).unsqueeze(0).unsqueeze(0);
-            c = torch::arange(160).unsqueeze(0).unsqueeze(2);
-            // std::cout << "R and C shapes: " << r.sizes() << " " << c.sizes() << std::endl;
-            auto maxim = 0;
-            auto minim = 250;
-            std::time(&times4);
-            // std::cout <<"detections cout " << detections_num * 160 * 160 << std::endl;
-            
-            // int fx = 0;
-            // int fy = 0;
-            // for(int num = 0; num < detections_num; num++) {
-            //     for (int h = 0; h < 160; h++) {
-            //         for (int w = 0; w < 160; w++) {
-            // //             // std::cout << "HYETA" << torch::equal(torch::ge(r[0][0][w], bbs[0][num][0]), fl) << std::endl;
-            //             if ((  torch::__and__( (torch::__and__(torch::ge(r[0][0][w], bbs[0][num][0]), torch::lt(r[0][0][w], bbs[2][num][0])) ) , ( torch::__and__(torch::ge(c[0][h][0], bbs[1][num][0]), torch::lt(c[0][h][0], bbs[3][num][0])) ))  )[0] == fl) {
-            //                 // matrix_multi_3d[num][h][w] = 0;
-            //                 continue;   
-            //             }
 
-            //             // if (((torch::equal(torch::ge(r[0][0][w], bbs[0][num][0]), fl)) == 1) && (fx == 0)) {
-            //             //     matrix_multi_3d[num][h][w] = 0;
-            //             //     fx = 1;
-            //             // }
-            //             // else if (((torch::equal(torch::lt(r[0][0][w], bbs[2][num][0]), fl)) == 1) && (fx == 1)) {
-            //             //     matrix_multi_3d[num][h][w] = 0;
-            //             // }
-            //             // else if (((torch::equal(torch::ge(c[0][h][0], bbs[1][num][0]), fl)) == 1) && (fy == 0)) {
-            //             //     matrix_multi_3d[num][h][w] = 0;
-            //             //     fy = 1;
-            //             // }
-            //             // else if (((torch::equal(torch::lt(c[0][h][0], bbs[3][num][0]), fl)) == 1) && (fy == 1)) {
-            //             //     matrix_multi_3d[num][h][w] = 0;
-            //             // }
-            //         }
-            //         // fx = 0;
-            //     }
-            //     // fy = 0;
-            // }
-            zer_mask = torch::zeros({detections_num, 160, 160});
-            for(int num = 0; num < detections_num; num++) {
-                for (int h=bbs[1][num][0].item<int>(); h < bbs[3][num][0].item<int>(); h++)
-                {
-                    for (int w=bbs[0][num][0].item<int>(); w < bbs[2][num][0].item<int>(); w++)
-                    {
-                        zer_mask[num][h][w] = matrix_multi_3d[num][h][w];
-                    }    
-                }
-            }
+            end = CLOCK::now();
+            std::cout << "FPS #6 MM " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+
+            begin = CLOCK::now();
             
-            std::time(&times5);
-            std::cout << "middle segmentation: " << times5 -times4 << std::endl;
+            // zer_mask = cv::Mat::zeros(160, 160, CV_32FC1);
+            // empty_mask = cv::Mat::zeros(160, 160, CV_32FC1);
+            // std::memcpy((void*) test_masks[num].data, zer_mask[num].data_ptr(), sizeof(decltype(zer_mask[num][0][0]))*(zer_mask[num].numel())/3);
+
+            // zer_mask = torch::zeros({detections_num, 160, 160}, {torch::kFloat32});
             
-            // std::cout << "matrix_multi_3d " << matrix_multi_3d.sizes() << " Rect " << rect.sizes() << std::endl;
-            std::time(&times6);
             for(int num = 0; num < detections_num; num++) {
-                test_masks.push_back(cv::Mat::zeros(160, 160, CV_32FC1));
-                for(size_t i=0; i<160; i++){
-                    for(size_t j=0; j<160; j++){
-                        test_masks[num].at<float>(j,i) = (float)(zer_mask[num][j][i].item<float>());
-                    } 
-                }
+                zer_masks.push_back(cv::Mat::zeros(160, 160, CV_32FC1));
+                mat_multi_3d.push_back(cv::Mat::zeros(160, 160, CV_32FC1));
+                std::cout << "after pushback" << std::endl;
+                std::memcpy((void*) mat_multi_3d[num].data, matrix_multi_3d[num].data_ptr(), sizeof(decltype(matrix_multi_3d[num][0][0]))*(matrix_multi_3d[num].numel())/2);
+                std::cout << "after memcpy matrix_multi_3d[num] = " << sizeof(decltype(matrix_multi_3d[num])) << " mat_multi_3d[num] = " << sizeof(decltype(mat_multi_3d[num])) << std::endl;
+                std::cout << "roi.x | " << detections[num].box.x << std::endl;
+                std::cout << "roi.y | " << detections[num].box.x << std::endl;
+                std::cout << "roi.w | " << detections[num].box.width << std::endl;
+                std::cout << "roi.h | " << detections[num].box.height << std::endl;
+                mat_multi_3d[num](cv::Rect(detections[num].box.x, detections[num].box.y, detections[num].box.width, detections[num].box.height)).copyTo(zer_masks[num](cv::Rect(detections[num].box.x, detections[num].box.y, detections[num].box.width, detections[num].box.height)));
+                std::cout << "after Rect" << std::endl;
+                // for (int h=bbs[1][num][0].item<int>(); h < bbs[3][num][0].item<int>(); h++)
+                // for (int h=rect[num][1].item<int>(); h < rect[num][3].item<int>(); h++)
+                // {
+                //     // for (int w = bbs[0][num][0].item<int>(); w < bbs[2][num][0].item<int>(); w++)
+                //     for (int w = rect[num][0].item<int>(); w < rect[num][2].item<int>(); w++)
+                //     {
+                //         zer_mask[num][h][w] = matrix_multi_3d[num][h][w];
+                        
+                //     }    
+                // }
                 if (num > 0) {
-                    cv::bitwise_or(test_masks[num], test_masks[num-1], test_masks[num]);
+                    cv::bitwise_or(zer_masks[num], zer_masks[num-1], zer_masks[num]);
                 }
             }
-            std::time(&times7);
-            std::cout << "last segmentation: " << times7 - times6 << std::endl;
 
-            for (int i = 0; i < detections_num; ++i)
-            {
-                Detection_mask detection = detections[i];
 
-                cv::Rect box = detection.box;
-                cv::Scalar color = detection.color;
-                // std::cout << "MASKS" << std::endl;  
-                for (int mix = 0; mix < 32; mix++) {
-                    // std::cout << "MASK[" << mix << "] = " << *(detection.mask + mix) << std::endl;  
+            end = CLOCK::now();
+            std::cout << "FPS #7 ZEROS TO MASK " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+            // torch::Tensor tmaskmasks;
+            // begin = CLOCK::now();
+            // std::cout << "detections_num " << detections_num << std::endl;
+            // for(int num = 0; num < detections_num; num++) {
+            //     test_masks.push_back(cv::Mat::zeros(160, 160, CV_32FC1));
+            //     std::cout << "working before memcpy" << std::endl << "zer_mask: " <<sizeof(decltype(zer_mask[num])) << "test_masks: " << sizeof(decltype(test_masks[num])) << std::endl;
+            //     // std::memcpy((void*) test_masks[num].data, zer_mask[num].data_ptr(), sizeof(decltype(zer_mask[num][0][0]))*(zer_mask[num].numel())/3);
+            //     std::cout << "working after memcpy" << std::endl;
+            //     // for(size_t i=0; i<160; i++){
+            //     //     for(size_t j=0; j<160; j++){
+            //     //         test_masks[num].at<float>(j,i) = (float)(zer_mask[num][j][i].item<float>());
+            //     //     } 
+            //     // }
+            //     if (num > 0) {
+            //         cv::bitwise_or(test_masks[num], test_masks[num-1], test_masks[num]);
+            //     }
+            // }
+            // end = CLOCK::now();
+            // std::cout << "FPS #8 MASKS TO MASK " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+
+            begin = CLOCK::now();
+            // for (int i = 0; i < detections_num; ++i)
+            // {
+            //     Detection_mask detection = detections[i];
+
+            //     cv::Rect box = detection.box;
+            //     cv::Scalar color = detection.color;
+            //     // std::cout << "MASKS" << std::endl;  
+            //     for (int mix = 0; mix < 32; mix++) {
+            //         // std::cout << "MASK[" << mix << "] = " << *(detection.mask + mix) << std::endl;  
                     
-                }  
-                // Detection box
-                cv::rectangle(image, box, color, 2);
+            //     }  
+            //     // Detection box
+            //     cv::rectangle(image, box, color, 2);
 
-                // Detection box text
-                std::string classString = detection.className + ' ' + std::to_string(detection.confidence).substr(0, 4);
-                cv::Size textSize = cv::getTextSize(classString, cv::FONT_HERSHEY_DUPLEX, 1, 2, 0);
-                cv::Rect textBox(box.x, box.y - 40, textSize.width + 10, textSize.height + 20);
+            //     // Detection box text
+            //     std::string classString = detection.className + ' ' + std::to_string(detection.confidence).substr(0, 4);
+            //     cv::Size textSize = cv::getTextSize(classString, cv::FONT_HERSHEY_DUPLEX, 1, 2, 0);
+            //     cv::Rect textBox(box.x, box.y - 40, textSize.width + 10, textSize.height + 20);
 
-                cv::rectangle(image, textBox, color, cv::FILLED);
-                cv::putText(image, classString, cv::Point(box.x + 5, box.y - 10), cv::FONT_HERSHEY_DUPLEX, 1, cv::Scalar(0, 0, 0), 2, 0);
-            }
-            cv::resize(test_masks[detections_num-1], test_masks[detections_num-1], scale);
+            //     cv::rectangle(image, textBox, color, cv::FILLED);
+            //     cv::putText(image, classString, cv::Point(box.x + 5, box.y - 10), cv::FONT_HERSHEY_DUPLEX, 1, cv::Scalar(0, 0, 0), 2, 0);
+            // }
+            cv::resize(zer_masks[detections_num-1], zer_masks[detections_num-1], scale);
+            end = CLOCK::now();
+            std::cout << "FPS #9 DRAWING " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+            std::cout << "NUMBER OF DETECTIONS: " << detections_num << std::endl;
         }
-        std::time(&times1);
-        std::cout << "parsing_segmentation: "<< times1-times0 << std::endl;
-        cv::imshow("webcam", image);
+        begin = CLOCK::now();
+        // cv::imshow("webcam", image);
         // cv::imshow("test_mask", test_mask);
-        if(detections_num) {
-            cv::imshow("test_mask", test_masks[detections_num-1]);
+        // if(detections_num) {
+        //     cv::imshow("test_mask", zer_masks[detections_num-1]);
 
-        }
+        // }
         // cv::imshow("test_mask1", test_masks[1]);
         if(cv::waitKey(30)>=0)
             break;
+
+        end = CLOCK::now();
+        std::cout << "FPS #10 SHOWING " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+
+        end_global = CLOCK::now();
+        std::cout << "FPS FPS FPS FPS HERE " << 1.0/(CLOCK_CAST(end_global - begin_global).count() / 1000000.0) << std::endl;
     }
     cv::destroyAllWindows();
 }

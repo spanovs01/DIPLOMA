@@ -2,8 +2,10 @@ cmake_minimum_required(VERSION 3.5)
 
 project(detect_YOLOv8_IR VERSION 0.1)
 
+set (CMAKE_CXX_STANDARD 17)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Ofast -no-pie")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 
 # eigen
 find_package(Torch REQUIRED PATHS /home/ss21mipt/libtorch/)
