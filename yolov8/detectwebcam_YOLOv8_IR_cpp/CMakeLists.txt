@@ -21,4 +21,4 @@ set(PROJECT_SOURCES
 )
 
 add_executable(detect_YOLOv8_IR ${PROJECT_SOURCES})
-target_link_libraries(detect_YOLOv8_IR PRIVATE openvino::runtime "${TORCH_LIBRARIES}" ${OpenCV_LIBS})
+target_link_libraries(detect_YOLOv8_IR openvino::runtime "${TORCH_LIBRARIES}" ${OpenCV_LIBS})

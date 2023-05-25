@@ -1,0 +1,3 @@
+/home/ss21mipt/DIPLOMA/yolov8/detectwebcam_YOLOv8_IR_cpp/build/,/CMakeFiles/rebuild_cache.dir
+/home/ss21mipt/DIPLOMA/yolov8/detectwebcam_YOLOv8_IR_cpp/build/,/CMakeFiles/edit_cache.dir
+/home/ss21mipt/DIPLOMA/yolov8/detectwebcam_YOLOv8_IR_cpp/build/,/CMakeFiles/detect_YOLOv8_IR.dir

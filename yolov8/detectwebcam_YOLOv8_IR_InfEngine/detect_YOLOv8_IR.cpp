@@ -1,6 +1,6 @@
 // #include <Eigen/Core>
 #include <torch/script.h>
-#include "openvino/openvino.hpp"
+#include <inference_engine.hpp>
 #include <opencv2/opencv.hpp>
 #include <ngraph/type/element_type.hpp>
 #include <iterator>
@@ -161,11 +161,24 @@ int main()
     std::chrono::steady_clock::time_point end;    
     // auto xml = "/home/ss21mipt/Documents/starkit/DIPLOMA/YOEO/config/IR&onnx_for_416_Petr_1/yoeo.xml";
     // auto xml = "/home/ss21mipt/Documents/starkit/DIPLOMA/to_rhoban/weights/Feds_yolov8_2_openvino/best.xml";
-    // auto xml = "/home/ss21mipt/DIPLOMA/weights/best_openvino_model/best.xml";
-    // auto xml = "/home/ss21mipt/DIPLOMA/weights/yolov8n-seg_openvino_22_opset14/Feds.xml";
-    // auto xml = "/home/ss21mipt/DIPLOMA/weights/yolov8-seg_Feds_ov-2022.3.0_opset-14/yolov8-seg_Feds_12.xml";
-    auto xml = "/home/ss21mipt/DIPLOMA/weights/yolov8/yolov8n-seg_openvino_22_opset14/Feds.xml";
+    auto xml = "/home/ss21mipt/DIPLOMA/weights/best_openvino_model/best.xml";
     auto png = "/home/ss21mipt/Pictures/photo_2023-03-28_12-46-25.jpg";
+
+    InferenceEngine::Core ie;
+    InferenceEngine::CNNNetwork net;
+    InferenceEngine::ExecutableNetwork executableNet;
+    //InferRequest::Ptr async_infer_request_next;
+    InferenceEngine::InferRequest infer_request;
+
+    InferenceEngine::OutputsDataMap outputs;
+    InferenceEngine::InputsDataMap inputs;
+
+    InferenceEngine::Blob::Ptr m_inputData;
+    InferenceEngine::Blob::Ptr output0;
+    InferenceEngine::Blob::Ptr output1;
+    std::string inputsName;
+    std::vector<std::string> outputsName;
+
     ov::Core core;
 
     std::shared_ptr<ov::Model> net = core.read_model(xml);    // net = ie.ReadNetwork(model_path);
@@ -191,8 +204,7 @@ int main()
     auto m_imageSize = m_inputH * m_inputW;
     auto data1 = m_inputData.data<float_t>();
     
-    // cv::VideoCapture cap(0);
-    cv::VideoCapture cap("/home/ss21mipt/DIPLOMA/test_data/sahr3/video.avi");
+    cv::VideoCapture cap(0);
     cv::Mat image;
     cv::Mat segments;
     cv::Mat mask;
@@ -319,8 +331,7 @@ int main()
                 std::cout << "roi.y | " << detections[num].box.x << std::endl;
                 std::cout << "roi.w | " << detections[num].box.width << std::endl;
                 std::cout << "roi.h | " << detections[num].box.height << std::endl;
-                if (detections[num].box.x != 0 &&  detections[num].box.y != 0 && detections[num].box.width !=0 && detections[num].box.height != 0 )
-                    mat_multi_3d[num](cv::Rect(detections[num].box.x, detections[num].box.y, detections[num].box.width, detections[num].box.height)).copyTo(zer_masks[num](cv::Rect(detections[num].box.x, detections[num].box.y, detections[num].box.width, detections[num].box.height)));
+                mat_multi_3d[num](cv::Rect(detections[num].box.x, detections[num].box.y, detections[num].box.width, detections[num].box.height)).copyTo(zer_masks[num](cv::Rect(detections[num].box.x, detections[num].box.y, detections[num].box.width, detections[num].box.height)));
                 std::cout << "after Rect" << std::endl;
                 if (num > 0) {
                     cv::bitwise_or(zer_masks[num], zer_masks[num-1], zer_masks[num]);
