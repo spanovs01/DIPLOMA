@@ -11,6 +11,7 @@
 #include <chrono>
 #include <algorithm>
 
+
 #define CLOCK std::chrono::steady_clock
 #define CLOCK_CAST std::chrono::duration_cast<std::chrono::microseconds>
 
@@ -64,9 +65,11 @@ std::vector<Detection_mask> parsing_boxes(cv::Mat image, auto out_data1, auto bo
         yolov8 = true;
         rows = box_shape1[2];
         dimensions = box_shape1[1];
-
+        std::cout << "output_boxes sizes: dims = " << output_boxes.size() << std::endl;
         output_boxes = output_boxes.reshape(1, dimensions);
+        std::cout << "output_boxes sizes: dims = " << output_boxes.size() << std::endl;
         cv::transpose(output_boxes, output_boxes);
+        std::cout << "output_boxes sizes: dims = " << output_boxes.size() << std::endl;
     }
 
     float *data = (float *)output_boxes.data;
@@ -89,7 +92,7 @@ std::vector<Detection_mask> parsing_boxes(cv::Mat image, auto out_data1, auto bo
             cv::Mat scores(1, number_classes, CV_32FC1, classes_scores);
             cv::Point class_id;
             
-            minMaxLoc(scores, 0, &maxClassScore, 0, &class_id);
+            cv::minMaxLoc(scores, 0, &maxClassScore, 0, &class_id);
             
             if (maxClassScore > modelScoreThreshold)
             {
@@ -206,13 +209,26 @@ int main()
     int number_classes = 1;
     int numcycles = 0;
     std::string name_classes = "g";
+    auto time_preproc= 0;
+    auto t_preproc = 0;
+    auto t_preproc_max = 0;
+    auto t_preproc_min = 100;
+    auto time_infer = 0;
+    auto t_infer = 0;
+    auto t_infer_max = 0;
+    auto t_infer_min = 100;
+    auto time_postproc = 0;
+    auto t_postproc = 0;
+    auto t_postproc_max = 0;
+    auto t_postproc_min = 100;
     
     begin_for_average = CLOCK::now();
-    while (numcycles < 1000){//cap.isOpened()){
+    while (numcycles < 500){//cap.isOpened()){
         begin_global = CLOCK::now();
 
         begin = CLOCK::now();
         cap >> image;
+        // image = cv::imread("/home/ss21mipt/DIPLOMA/IoU_tool/ground_t/frame111.jpg");
         // image = cv::imread(png);
 
         if (image.empty() || !image.data) {
@@ -220,10 +236,10 @@ int main()
         }
         cv::Size scale(640, 640);  
         cv::resize(image, image, scale);    
-        end = CLOCK::now();
-        std::cout << "FPS #1 IMREAD AND PREPROC " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+        // end = CLOCK::now();
+        // std::cout << "FPS #1 IMREAD AND PREPROC " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
         
-        begin = CLOCK::now();                       // FILLING DATA1
+        // begin = CLOCK::now();                       // FILLING DATA1
         for (size_t row = 0; row < m_inputH; row++) {
             for (size_t col = 0; col < m_inputW; col++) {
                 for (size_t ch = 0; ch < m_numChannels; ch++) {
@@ -233,13 +249,34 @@ int main()
                 }
             }
         }
+
+        // std::memcpy((void*) data1, image.data, sizeof(decltype(image.at<cv::Vec3b>(0, 0)[0])) * image.total());
+
+        // end = CLOCK::now();
+        // std::cout << "FPS #2 FORMING TENSOR AND NORMALIZATION " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
         end = CLOCK::now();
-        std::cout << "FPS #2 FORMING TENSOR AND NORMALIZATION " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+        time_preproc = time_preproc + (CLOCK_CAST(end - begin).count() / 1000.0);
+        t_preproc = (CLOCK_CAST(end - begin).count() / 1000.0);
+        if (t_preproc > t_preproc_max) {
+            t_preproc_max = t_preproc;
+        }
+        if (t_preproc < t_preproc_min) {
+            t_preproc_min = t_preproc;
+        }
+        std::cout << "FPS #1 PREPROCESSING: " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
 
         begin = CLOCK::now();
         infer_request.infer();                      // INFER
         end = CLOCK::now();
-        std::cout << "FPS #3 INFER " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+        time_infer = time_infer + (CLOCK_CAST(end - begin).count() / 1000.0);
+        t_infer = (CLOCK_CAST(end - begin).count() / 1000.0);
+        if (t_infer > t_infer_max) {
+            t_infer_max = t_infer;
+        }
+        if (t_infer < t_infer_min) {
+            t_infer_min = t_infer;
+        }
+        std::cout << "FPS #2 INFERENCE: " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
 
         begin = CLOCK::now();                       // PARSING BOXES
         ov::Tensor output_tensor1 = infer_request.get_output_tensor(0);
@@ -252,9 +289,11 @@ int main()
         auto out_data2 = output_tensor2.data<float_t>();
         auto mask_shape2 = output_tensor2.get_shape();
 
+        std::cout << "ouputs shapes: " << box_shape1 << " and " << mask_shape2 << std::endl;
+
         std::vector<Detection_mask> detections = parsing_boxes(image, out_data1, box_shape1, box_type, modelScoreThreshold, modelNMSThreshold, number_classes, name_classes);
-        end = CLOCK::now();
-        std::cout << "FPS #4 PARSING BBOXES " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+        // end = CLOCK::now();
+        // std::cout << "FPS #4 PARSING BBOXES " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
         
         torch::Tensor proto;
         torch::Tensor mask_in;
@@ -272,15 +311,15 @@ int main()
         int detections_num = detections.size();
 
         if (detections_num) {
-            begin = CLOCK::now();                   // FROM OUTOUT TO TORCH TENSOR
+            // begin = CLOCK::now();                   // FROM OUTOUT TO TORCH TENSOR
             auto options = torch::TensorOptions().dtype(torch::kFloat32);
             proto = torch::from_blob(out_data2, {32,160,160}, options);
             mask_in = torch::zeros({detections_num, 32}, {torch::kFloat32});
             rect = torch::zeros({detections_num, 4}, {torch::kFloat32});
-            end = CLOCK::now();
-            std::cout << "FPS #4 DATA TO TTENSOR " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+            // end = CLOCK::now();
+            // std::cout << "FPS #4 DATA TO TTENSOR " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
             
-            begin = CLOCK::now();                   // FROM [0,640] pixels to [0,160] pixels
+            // begin = CLOCK::now();                   // FROM [0,640] pixels to [0,160] pixels
             for(int num = 0; num < detections_num; num++) {
                 for(int mask_elem = 0; mask_elem < 32; mask_elem++) {
                     mask_in[num][mask_elem] = (detections[num].mask[mask_elem]);
@@ -297,18 +336,18 @@ int main()
                 if ((detections[num].box.y + detections[num].box.height) > 160 || (detections[num].box.y + detections[num].box.height) < 0)
                     detections[num].box.height = 160 - detections[num].box.y;
             }
-            end = CLOCK::now();
-            std::cout << "FPS #5 TRANSFORM BBOXES " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+            // end = CLOCK::now();
+            // std::cout << "FPS #5 TRANSFORM BBOXES " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
             
-            begin = CLOCK::now();                   // MATRIX OPERATIONS
+            // begin = CLOCK::now();                   // MATRIX OPERATIONS
             mask_in_m = proto.view({32, 25600});
             matrix_multi = torch::mm(mask_in, mask_in_m);
             matrix_multi_3d = torch::sigmoid(matrix_multi).view({detections_num, 160, 160});
 
-            end = CLOCK::now();
-            std::cout << "FPS #6 MM " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+            // end = CLOCK::now();
+            // std::cout << "FPS #6 MM " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
 
-            begin = CLOCK::now();                   // FROM TORCH TENSORS TO MASKS
+            // begin = CLOCK::now();                   // FROM TORCH TENSORS TO MASKS
             for(int num = 0; num < detections_num; num++) {
                 zer_masks.push_back(cv::Mat::zeros(160, 160, CV_32FC1));
                 mat_multi_3d.push_back(cv::Mat::zeros(160, 160, CV_32FC1));
@@ -326,10 +365,10 @@ int main()
                     cv::bitwise_or(zer_masks[num], zer_masks[num-1], zer_masks[num]);
                 }
             }
-            end = CLOCK::now();
-            std::cout << "FPS #7 ZEROS TO MASK " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+            // end = CLOCK::now();
+            // std::cout << "FPS #7 ZEROS TO MASK " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
 
-            begin = CLOCK::now();                   // DRAWING BBOXES
+            // begin = CLOCK::now();                   // DRAWING BBOXES
             // for (int i = 0; i < detections_num; ++i)
             // {
             //     Detection_mask detection = detections[i];
@@ -345,29 +384,61 @@ int main()
             //     cv::rectangle(image, textBox, color, cv::FILLED);
             //     cv::putText(image, classString, cv::Point(box.x + 5, box.y - 10), cv::FONT_HERSHEY_DUPLEX, 1, cv::Scalar(0, 0, 0), 2, 0);
             // }
-            cv::resize(zer_masks[detections_num-1], zer_masks[detections_num-1], scale);
-            end = CLOCK::now();
-            std::cout << "FPS #9 DRAWING " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+            cv::resize(zer_masks[detections_num-1], zer_masks[detections_num-1], scale, cv::INTER_CUBIC);
+            // end = CLOCK::now();
+            // std::cout << "FPS #9 DRAWING " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
             std::cout << "NUMBER OF DETECTIONS: " << detections_num << std::endl;
         }
-        begin = CLOCK::now();                       // SHOWING BBOXES AND SEGMANTATION MASK
-        cv::imshow("webcam", image);
-        // cv::imshow("test_mask", test_mask);
-        if(detections_num) {
-            cv::imshow("test_mask", zer_masks[detections_num-1]);
+        // begin = CLOCK::now();                       // SHOWING BBOXES AND SEGMANTATION MASK
+        cv::resize(zer_masks[detections_num-1], zer_masks[detections_num-1], cv::Size(720,540), cv::INTER_CUBIC);
+        for(int i=0; i < 160; i++) {
+            for(int j=0; j < 160; j++) {
+                if(zer_masks[detections_num-1].at<float>(i,j) < 0)
+                    zer_masks[detections_num-1].at<float>(i,j) = 0.0;
+                if(zer_masks[detections_num-1].at<float>(i,j) > 1)
+                    zer_masks[detections_num-1].at<float>(i,j) = 1.0;
+                zer_masks[detections_num-1].at<float>(i,j) = std::round(zer_masks[detections_num-1].at<float>(i,j));
+            }
         }
-        if(cv::waitKey(27)>=0)
+        // cv::imshow("webcam", image);
+        // cv::imshow("test_mask", test_mask);
+        // if(detections_num) {
+        //     cv::imshow("test_mask", zer_masks[detections_num-1]);
+        //     zer_masks[detections_num-1].convertTo(test_mask, CV_8UC1, 255);
+            // break;
+        // }
+        // if(cv::waitKey(27)>=0)
 
-            break;
+        //     break;
+        // end = CLOCK::now();
+        // std::cout << "FPS #10 SHOWING " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
+
+        // end_global = CLOCK::now();
+        // std::cout << "FPS FPS FPS FPS HERE " << 1.0/(CLOCK_CAST(end_global - begin_global).count() / 1000000.0) << std::endl;
         end = CLOCK::now();
-        std::cout << "FPS #10 SHOWING " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
-
-        end_global = CLOCK::now();
-        std::cout << "FPS FPS FPS FPS HERE " << 1.0/(CLOCK_CAST(end_global - begin_global).count() / 1000000.0) << std::endl;
+        time_postproc = time_postproc + (CLOCK_CAST(end - begin).count() / 1000.0);
+        t_postproc = (CLOCK_CAST(end - begin).count() / 1000.0);
+        if (t_postproc > t_postproc_max) {
+            t_postproc_max = t_postproc;
+        }
+        if (t_postproc < t_postproc_min) {
+            t_postproc_min = t_postproc;
+        }
+        std::cout << "FPS #3 POSTPROCESSING: " <<  (CLOCK_CAST(end - begin).count() / 1000.0) << std::endl;
         numcycles=numcycles+1;
+        // cv::imwrite("/home/ss21mipt/DIPLOMA/IoU_tool/YOLOV8_segmentation.jpg", test_mask);
+        std::cout <<"NUM OF CYCLES " << numcycles << std::endl;
     }
     end_for_average = CLOCK::now();
     std::cout << "AVERAGE FPS: " << numcycles*1.0/(CLOCK_CAST(end_for_average - begin_for_average).count() / 1000000.0) << std::endl;
+    std::cout << "AVERAGE PREPROCESSING FPS: " << numcycles*1.0/(time_preproc / 1000.0) << std::endl;
+    std::cout << "AVERAGE INFERENCE FPS: " << numcycles*1.0/(time_infer / 1000.0) << std::endl;
+    std::cout << "AVERAGE POSTPROCESSING FPS: " << numcycles*1.0/(time_postproc / 1000.0) << std::endl;
+
+    std::cout << "AVERAGE PREPROCESSING time: " << ((time_preproc) / (numcycles*1.0)) << " in range [" << t_preproc_min << ", " << t_preproc_max << "]" << std::endl;
+    std::cout << "AVERAGE INFERENCE time: " << ((time_infer) / (numcycles*1.0)) << " in range [" << t_infer_min << ", " << t_infer_max << "]" << std::endl;
+    std::cout << "AVERAGE POSTPROCESSING time: " << ((time_postproc) / (numcycles*1.0)) << " in range [" << t_postproc_min << ", " << t_postproc_max << "]" << std::endl;
+
     // cv::destroyAllWindows();
 
 }
